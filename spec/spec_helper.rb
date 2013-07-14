@@ -1,12 +1,17 @@
-$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
-$LOAD_PATH.unshift(File.dirname(__FILE__))
-require 'rspec'
-require 'global'
+require 'simplecov'
 
-# Requires supporting files with custom matchers and macros, etc,
-# in ./support/ and its subdirectories.
-Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
+SimpleCov.start do
+  add_filter '/spec/'
+
+  add_group 'Libraries', '/lib/'
+end
 
 RSpec.configure do |config|
+  require "global"
   
+  config.treat_symbols_as_metadata_keys_with_true_values = true
+  config.run_all_when_everything_filtered = true
+  config.filter_run :focus
+
+  config.order = 'random'
 end

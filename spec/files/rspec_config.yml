@@ -1,0 +1,4 @@
+:default:
+  default_value: "default value"
+test:
+  test_value: "test value"
