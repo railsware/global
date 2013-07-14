@@ -9,7 +9,6 @@ Gem::Specification.new do |s|
 
   s.rubyforge_project = "global"
 
-  s.date = "2013-07-14"
   s.description = "Simple way to load you configs from yaml"
   s.summary = "Simple way to load you configs from yaml"
 
