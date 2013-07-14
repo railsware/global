@@ -9,8 +9,8 @@ Gem::Specification.new do |s|
 
   s.rubyforge_project = "global"
 
-  s.description = "Simple way to load you configs from yaml"
-  s.summary = "Simple way to load you configs from yaml"
+  s.description = "Simple way to load your configs from yaml"
+  s.summary = "Simple way to load your configs from yaml"
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")

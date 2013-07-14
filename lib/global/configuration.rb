@@ -2,7 +2,7 @@ require "forwardable"
 
 module Global
   class Configuration
-    extend ::Forwardable
+    extend Forwardable
 
     attr_reader :hash
 
@@ -16,7 +16,7 @@ module Global
     protected
 
     def method_missing(method, *args, &block)
-      @hash.key?(method) ? @hash[method] : super
+      key?(method) ? hash[method] : super
     end
   end
 end

@@ -1,4 +1,4 @@
-# global [![Code Climate](https://codeclimate.com/github/paladiy/global.png)](https://codeclimate.com/github/paladiy/global)
+# global [![Build Status](https://travis-ci.org/paladiy/global.png)](https://travis-ci.org/paladiy/global) [![Code Climate](https://codeclimate.com/github/paladiy/global.png)](https://codeclimate.com/github/paladiy/global)
 
 Description goes here.
 

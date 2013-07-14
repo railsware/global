@@ -30,7 +30,7 @@ describe Global do
     end
   end
 
-  context ".configuration" do
+  describe ".configuration" do
     subject{ described_class.configuration }
 
     it{ should be_instance_of(Global::Configuration) }
@@ -47,6 +47,20 @@ describe Global do
 
     context "when nested directories" do
       it{ subject.rspec["config"].to_hash.should == {"default_value"=>"default nested value", "test_value"=>"test nested value"} }
+    end
+  end
+
+  describe ".method_missing" do
+    context "when file exists" do
+      subject{ described_class.rspec_config }
+
+      it{ should  be_kind_of(Global::Configuration) }
+    end
+
+    context "when file does not exist" do
+      subject{ described_class.some_file }
+
+      it{ lambda{ subject }.should raise_error(NoMethodError) }
     end
   end
 end
