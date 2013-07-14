@@ -26,9 +26,8 @@ module Global
     protected
     
     def load_configuration(dir, env)
-      config = {}
+      config = load_from_file(dir, env)
       
-      config.deep_merge!(load_from_file(dir, env))
       config.deep_merge!(load_from_directory(dir, env))
 
       Configuration.new(config)
