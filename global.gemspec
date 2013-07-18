@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.homepage = "http://github.com/paladiy/global"
+  s.homepage = "https://github.com/railsware/global"
   s.licenses = ["MIT"]
 
   s.add_development_dependency "rspec",     "~> 2.14.1"
