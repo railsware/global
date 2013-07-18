@@ -1,6 +1,41 @@
 # global [![Build Status](https://travis-ci.org/paladiy/global.png)](https://travis-ci.org/paladiy/global) [![Code Climate](https://codeclimate.com/github/paladiy/global.png)](https://codeclimate.com/github/paladiy/global)
 
-Description goes here.
+## Description
+
+Global provides accessors methods to your configuration which is stored in yaml files.
+
+## Instalation
+
+```ruby
+gem 'global'
+```
+
+## Configuration
+
+```ruby
+> Global.environment = "YOUR_ENV_HERE"
+> Global.config_directory = "PATH_TO_DIRECTORY_WITH_FILES"
+```
+
+##Usage
+
+#### Loading configuration from: `PATH_TO_DIRECTORY_WITH_FILES/hosts.yml`
+
+```ruby
+> Global.hosts
+=> { "api" => "api.localhost.dev", "app" => "localhost.dev" }
+> Global.hosts.api
+=> { "api" => "api.localhost.dev" }
+```
+
+#### Loading recursive from: `PATH_TO_DIRECTORY_WITH_FILES/sites/api.yml`
+
+```ruby
+> Global.sites.api
+=> { "host" => "api.localhost.dev", "port" => 3000 }
+> Global.sites.api.host
+=> "api.localhost.dev"
+```
 
 ## Contributing to global
 
