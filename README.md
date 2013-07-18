@@ -19,7 +19,7 @@ gem 'global'
 
 ##Usage
 
-#### Loading configuration from: `PATH_TO_DIRECTORY_WITH_FILES/hosts.yml`
+Loading configuration from: `PATH_TO_DIRECTORY_WITH_FILES/hosts.yml`
 
 ```ruby
 > Global.hosts
@@ -28,7 +28,7 @@ gem 'global'
 => { "api" => "api.localhost.dev" }
 ```
 
-#### Loading recursive from: `PATH_TO_DIRECTORY_WITH_FILES/sites/api.yml`
+Loading recursive from: `PATH_TO_DIRECTORY_WITH_FILES/sites/api.yml`
 
 ```ruby
 > Global.sites.api
