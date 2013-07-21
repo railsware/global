@@ -50,6 +50,23 @@ describe Global do
     end
   end
 
+  context ".reload!" do
+    subject{ described_class.reload! }
+
+    before do
+      described_class.configuration
+      described_class.environment = "development"
+    end
+
+    after do
+      described_class.environment = "test"
+      described_class.reload!
+    end
+
+    it{ should be_instance_of(Global::Configuration) }
+    its("rspec_config.to_hash"){ should == {"default_value"=>"default value", "test_value"=>"development value"} }      
+  end
+
   describe ".method_missing" do
     context "when file exists" do
       subject{ described_class.rspec_config }

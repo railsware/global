@@ -2,9 +2,13 @@ require "erb"
 
 module Global
   module Base
-    def configuration(env = nil)
-      @configuration = nil if env
-      @configuration ||= load_configuration(config_directory, env.is_a?(String) ? env : environment)
+    def configuration
+      @configuration ||= load_configuration(config_directory, environment)
+    end
+
+    def reload!
+      @configuration = nil
+      configuration
     end
 
     def environment=(env)
