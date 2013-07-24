@@ -1,4 +1,4 @@
-# global [![Build Status](https://travis-ci.org/paladiy/global.png)](https://travis-ci.org/paladiy/global) [![Code Climate](https://codeclimate.com/github/paladiy/global.png)](https://codeclimate.com/github/paladiy/global)
+# global [![Build Status](https://travis-ci.org/railsware/global.png)](https://travis-ci.org/railsware/global) [![Code Climate](https://codeclimate.com/github/railsware/global.png)](https://codeclimate.com/github/railsware/global)
 
 ## Description
 
@@ -17,24 +17,104 @@ gem 'global'
 > Global.config_directory = "PATH_TO_DIRECTORY_WITH_FILES"
 ```
 
-##Usage
+For rails put initialization into `config/initializers/global.rb`
 
-Loading configuration from: `PATH_TO_DIRECTORY_WITH_FILES/hosts.yml`
+```ruby
+Global.environment = Rails.env.to_s
+Global.config_directory = Rails.root.join('config/global').to_s
+```
+
+## Usage
+
+### General
+
+Config file `config/global/hosts.yml`:
+
+```yml
+test:
+  web: localhost
+  api: api.localhost
+development:
+  web: localhost
+  api: api.localhost
+production:
+  web: myhost.com
+  api: api.myhost.com
+```
+
+Now for development environment we have next data:
 
 ```ruby
 > Global.hosts
-=> { "api" => "api.localhost.dev", "app" => "localhost.dev" }
+=> { "api" => "api.localhost", "web" => "localhost" }
 > Global.hosts.api
-=> { "api" => "api.localhost.dev" }
+=> "api.localhost"
 ```
 
-Loading recursive from: `PATH_TO_DIRECTORY_WITH_FILES/sites/api.yml`
+### Namespacing
+
+Config file `config/global/web/basic_auth.yml` with:
+
+```yml
+test:
+  username: user
+  password: secret
+development:
+  username: user
+  password: secret
+production:
+  username: production_user
+  password: supersecret
+```
+
+After that in development environment we have:
 
 ```ruby
-> Global.sites.api
-=> { "host" => "api.localhost.dev", "port" => 3000 }
-> Global.sites.api.host
-=> "api.localhost.dev"
+> Global.web.basic_auth
+=> { "username" => "development_user", "password" => "secret" }
+> Global.web.basic_auth.username
+=> "development_user"
+```
+
+### Default section
+
+Config file example:
+
+```yml
+default:
+  web: localhost
+  api: api.localhost
+production:
+  web: myhost.com
+  api: api.myhost.com
+```
+
+Data from default section uses until it's overridden in specific environment.
+
+### ERB support
+
+Config file 'global/file_name.yml' with:
+
+```yml
+test:
+  key: <%=1+1%>
+development:
+  key: <%=2+2%>
+production:
+  key: <%=3+3%>
+```
+
+As a result in development environment we have:
+
+```ruby
+> Global.file_name.key
+=> 4
+```
+
+### Reload configuration data
+
+```ruby
+> Global.reload!
 ```
 
 ## Contributing to global
