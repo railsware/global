@@ -14,7 +14,7 @@ module Global
     def environment=(env)
       @environment = env
     end
-    
+
     def config_directory=(dir)
       @config_directory = dir
     end
@@ -28,10 +28,10 @@ module Global
     end
 
     protected
-    
+
     def load_configuration(dir, env)
       config = load_from_file(dir, env)
-      
+
       config.deep_merge!(load_from_directory(dir, env))
 
       Configuration.new(config)
@@ -39,10 +39,10 @@ module Global
 
     def load_from_file(dir, env)
       config = {}
-      
+
       if File.exists?(file = "#{dir}.yml")
         configurations = YAML::load(ERB.new(IO.read(file)).result)
-        config = configurations[:default] || {}
+        config = configurations[:default] || configurations["default"] || {}
         config.deep_merge!(configurations[env] || {})
       end
 
@@ -51,7 +51,7 @@ module Global
 
     def load_from_directory(dir, env)
       config = {}
-      
+
       if File.directory?(dir)
         Dir["#{dir}/*"].each do |entry|
           namespace = entry.gsub(/^#{dir}\/?/, '').gsub(/\.yml$/, '')
@@ -59,9 +59,9 @@ module Global
         end
       end
 
-      config 
+      config
     end
-    
+
     def method_missing(method, *args, &block)
       configuration.key?(method) ? configuration[method] : super
     end
