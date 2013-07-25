@@ -4,8 +4,8 @@ require "global/version"
 Gem::Specification.new do |s|
   s.name = "global"
   s.version = Global::VERSION
-  s.authors = ["paladiy"]
-  s.email = "olexanderpaladiy@gmail.com"
+  s.authors = ["Railsware LLC"]
+  s.email = "contact@railsware.com"
 
   s.rubyforge_project = "global"
 

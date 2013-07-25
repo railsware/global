@@ -129,6 +129,6 @@ As a result in development environment we have:
 
 ## Copyright
 
-Copyright (c) 2013 paladiy. See LICENSE.txt for
+Copyright (c) 2013 Railsware LLC. See LICENSE.txt for
 further details.
 
