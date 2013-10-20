@@ -48,6 +48,11 @@ describe Global do
     context "when nested directories" do
       it{ subject.rspec["config"].to_hash.should == {"default_value"=>"default nested value", "test_value"=>"test nested value"} }
     end
+    
+    context "when boolean" do
+      it{ subject.bool_config.works.should == true }
+      it{ subject.bool_config.works?.should == true }
+    end
   end
 
   context ".reload!" do
@@ -80,4 +85,5 @@ describe Global do
       it{ lambda{ subject }.should raise_error(NoMethodError) }
     end
   end
+  
 end
