@@ -1,0 +1,5 @@
+:default:
+  works: false
+
+test:
+  works: true
