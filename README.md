@@ -93,7 +93,7 @@ Data from default section uses until it's overridden in specific environment.
 
 ### ERB support
 
-Config file 'global/file_name.yml' with:
+Config file `global/file_name.yml` with:
 
 ```yml
 test:
