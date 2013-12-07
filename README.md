@@ -91,6 +91,28 @@ production:
 
 Data from default section uses until it's overridden in specific environment.
 
+### Nested configurations
+
+Config file `global/nested.yml` with:
+```yml
+test:
+  group:
+    key: "test value"
+development:
+  group:
+    key: "development value"
+production:
+  group:
+    key: "production value"
+```
+
+Access to nested options provides like: 
+
+```ruby
+> Global.nested.group.key
+=> "development value"
+```
+
 ### ERB support
 
 Config file `global/file_name.yml` with:
