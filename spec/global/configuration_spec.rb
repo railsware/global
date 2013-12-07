@@ -1,7 +1,7 @@
 require "spec_helper"
 
 describe Global::Configuration do
-  let(:hash){ { "key" => "value" } }
+  let(:hash){ { "key" => "value", "nested" => { "key" => "value" } } }
   let(:configuration){ described_class.new hash }
 
   describe "#hash" do
@@ -53,6 +53,12 @@ describe Global::Configuration do
       subject{ configuration.some_key }
 
       it{ lambda { subject }.should raise_error(NoMethodError) }
+    end
+
+    context "with nested hash" do
+      subject{ configuration.nested.key }
+
+      it{ should == "value" }
     end
   end
 end

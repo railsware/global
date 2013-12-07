@@ -1,0 +1,11 @@
+:default:
+  nested:
+    test_value: "default value"
+
+test:
+  nested:
+    test_value: "test value"
+
+development:
+  nested:
+    test_value: "development value"

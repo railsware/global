@@ -12,12 +12,17 @@ module Global
     def initialize(hash)
       @hash = hash.respond_to?(:with_indifferent_access) ? hash.with_indifferent_access : hash
     end
-    
+
     protected
 
     def method_missing(method, *args, &block)
       method = method.to_s[0..-2] if method.to_s[-1] == '?'
-      key?(method) ? hash[method] : super
+      if key?(method)
+        value = hash[method]
+        value.kind_of?(Hash) ? Global::Configuration.new(value) : value
+      else
+        super
+      end
     end
   end
 end
