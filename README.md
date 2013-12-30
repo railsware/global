@@ -2,9 +2,9 @@
 
 ## Description
 
-Global provides accessors methods to your configuration which is stored in yaml files.
+The 'global' gem provides accessor methods for your configuration data. The data is stored in yaml files.
 
-## Instalation
+## Installation
 
 ```ruby
 gem 'global'
@@ -42,7 +42,7 @@ production:
   api: api.myhost.com
 ```
 
-Now for development environment we have next data:
+In the development environment we now have:
 
 ```ruby
 > Global.hosts
@@ -57,10 +57,10 @@ Config file `config/global/web/basic_auth.yml` with:
 
 ```yml
 test:
-  username: user
+  username: test_user
   password: secret
 development:
-  username: user
+  username: development_user
   password: secret
 production:
   username: production_user
@@ -89,7 +89,7 @@ production:
   api: api.myhost.com
 ```
 
-Data from default section uses until it's overridden in specific environment.
+Data from the default section is used until it's overridden in a specific environment.
 
 ### Nested configurations
 
@@ -106,7 +106,7 @@ production:
     key: "production value"
 ```
 
-Access to nested options provides like: 
+Nested options can then be accessed as follows: 
 
 ```ruby
 > Global.nested.group.key
@@ -126,7 +126,7 @@ production:
   key: <%=3+3%>
 ```
 
-As a result in development environment we have:
+As a result, in the development environment we have:
 
 ```ruby
 > Global.file_name.key
