@@ -1,4 +1,4 @@
-# global [![Build Status](https://travis-ci.org/railsware/global.png)](https://travis-ci.org/railsware/global) [![Code Climate](https://codeclimate.com/github/railsware/global.png)](https://codeclimate.com/github/railsware/global)
+# Global [![Build Status](https://travis-ci.org/railsware/global.png)](https://travis-ci.org/railsware/global) [![Code Climate](https://codeclimate.com/github/railsware/global.png)](https://codeclimate.com/github/railsware/global)
 
 The 'global' gem provides accessor methods for your configuration data. The data is stored in yaml files.
 
@@ -17,11 +17,22 @@ gem 'global'
 > Global.config_directory = "PATH_TO_DIRECTORY_WITH_FILES"
 ```
 
+Or you can use `configure` block:
+
+```ruby
+Global.configure do |config|
+  config.environment = "YOUR_ENV_HERE"
+  config.config_directory = "PATH_TO_DIRECTORY_WITH_FILES"
+end
+```
+
 For rails put initialization into `config/initializers/global.rb`
 
 ```ruby
-Global.environment = Rails.env.to_s
-Global.config_directory = Rails.root.join('config/global').to_s
+Global.configure do |config|
+  config.environment = Rails.env.to_s
+  config.config_directory = Rails.root.join('config/global').to_s
+end
 ```
 
 ## Usage
@@ -106,7 +117,7 @@ production:
     key: "production value"
 ```
 
-Nested options can then be accessed as follows: 
+Nested options can then be accessed as follows:
 
 ```ruby
 > Global.nested.group.key

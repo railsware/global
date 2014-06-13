@@ -2,6 +2,14 @@ require "erb"
 
 module Global
   module Base
+    extend self
+
+    attr_writer :environment, :config_directory
+
+    def configure
+      yield self
+    end
+
     def configuration
       @configuration ||= load_configuration(config_directory, environment)
     end
@@ -9,14 +17,6 @@ module Global
     def reload!
       @configuration = nil
       configuration
-    end
-
-    def environment=(env)
-      @environment = env
-    end
-
-    def config_directory=(dir)
-      @config_directory = dir
     end
 
     def environment

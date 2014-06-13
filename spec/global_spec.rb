@@ -1,9 +1,12 @@
 require "spec_helper"
 
 describe Global do
+
   before(:each) do
-    described_class.environment = "test"
-    described_class.config_directory = File.join(Dir.pwd, "spec/files")
+    described_class.configure do |config|
+      config.environment = "test"
+      config.config_directory = File.join(Dir.pwd, "spec/files")
+    end
   end
 
   describe ".environment" do
