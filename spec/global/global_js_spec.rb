@@ -11,7 +11,7 @@ describe Global, "generate js in Rails"  do
   end
 
   it "should generate valid global config" do
-    expect(evaljs("GlobalJs.test")).to eq(1)
+    expect(evaljs("GlobalJs.rspec.config.default_value")).to eq('default nested value')
   end
 
 end

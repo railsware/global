@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 require 'erb'
+require 'json'
 
 module Global
   module Base
@@ -34,17 +35,14 @@ module Global
     end
 
     def generate_js(options = {})
-      "window.#{js_namespace} = {test: 1}"
+      "window.#{js_namespace} = #{configuration.full_hash.to_json}"
     end
-
 
     protected
 
     def load_configuration(dir, env)
       config = load_from_file(dir, env)
-
       config.deep_merge!(load_from_directory(dir, env))
-
       Configuration.new(config)
     end
 

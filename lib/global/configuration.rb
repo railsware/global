@@ -15,6 +15,18 @@ module Global
       @hash = hash.respond_to?(:with_indifferent_access) ? hash.with_indifferent_access : hash
     end
 
+    def full_hash
+      hash_result = hash.map do |k,v|
+        case v
+        when ::Global::Configuration
+          [k, v.full_hash]
+        else
+          [k, v]
+        end
+      end
+      Hash[hash_result]
+    end
+
     protected
 
     def method_missing(method, *args, &block)
