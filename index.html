@@ -1,0 +1,195 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Global by railsware</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Global</h1>
+        <p>&quot;Global&quot; provides accessor methods for your configuration data</p>
+
+        <p class="view"><a href="https://github.com/railsware/global">View the Project on GitHub <small>railsware/global</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/railsware/global/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/railsware/global/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/railsware/global">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a name="global--" class="anchor" href="#global--"><span class="octicon octicon-link"></span></a>global <a href="https://travis-ci.org/railsware/global"><img src="https://travis-ci.org/railsware/global.png" alt="Build Status"></a> <a href="https://codeclimate.com/github/railsware/global"><img src="https://codeclimate.com/github/railsware/global.png" alt="Code Climate"></a>
+</h1>
+
+<p>The 'global' gem provides accessor methods for your configuration data. The data is stored in yaml files.</p>
+
+<h2>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<p>Add to Gemfile:</p>
+
+<div class="highlight highlight-ruby"><pre><span class="n">gem</span> <span class="s1">'global'</span>
+</pre></div>
+
+<h2>
+<a name="configuration" class="anchor" href="#configuration"><span class="octicon octicon-link"></span></a>Configuration</h2>
+
+<div class="highlight highlight-ruby"><pre><span class="o">&gt;</span> <span class="no">Global</span><span class="o">.</span><span class="n">environment</span> <span class="o">=</span> <span class="s2">"YOUR_ENV_HERE"</span>
+<span class="o">&gt;</span> <span class="no">Global</span><span class="o">.</span><span class="n">config_directory</span> <span class="o">=</span> <span class="s2">"PATH_TO_DIRECTORY_WITH_FILES"</span>
+</pre></div>
+
+<p>For rails put initialization into <code>config/initializers/global.rb</code></p>
+
+<div class="highlight highlight-ruby"><pre><span class="no">Global</span><span class="o">.</span><span class="n">environment</span> <span class="o">=</span> <span class="no">Rails</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">to_s</span>
+<span class="no">Global</span><span class="o">.</span><span class="n">config_directory</span> <span class="o">=</span> <span class="no">Rails</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">'config/global'</span><span class="p">)</span><span class="o">.</span><span class="n">to_s</span>
+</pre></div>
+
+<h2>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<h3>
+<a name="general" class="anchor" href="#general"><span class="octicon octicon-link"></span></a>General</h3>
+
+<p>Config file <code>config/global/hosts.yml</code>:</p>
+
+<div class="highlight highlight-yml"><pre><span class="l-Scalar-Plain">test</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">web</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">localhost</span>
+  <span class="l-Scalar-Plain">api</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">api.localhost</span>
+<span class="l-Scalar-Plain">development</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">web</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">localhost</span>
+  <span class="l-Scalar-Plain">api</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">api.localhost</span>
+<span class="l-Scalar-Plain">production</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">web</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">myhost.com</span>
+  <span class="l-Scalar-Plain">api</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">api.myhost.com</span>
+</pre></div>
+
+<p>In the development environment we now have:</p>
+
+<div class="highlight highlight-ruby"><pre><span class="o">&gt;</span> <span class="no">Global</span><span class="o">.</span><span class="n">hosts</span>
+<span class="o">=&gt;</span> <span class="p">{</span> <span class="s2">"api"</span> <span class="o">=&gt;</span> <span class="s2">"api.localhost"</span><span class="p">,</span> <span class="s2">"web"</span> <span class="o">=&gt;</span> <span class="s2">"localhost"</span> <span class="p">}</span>
+<span class="o">&gt;</span> <span class="no">Global</span><span class="o">.</span><span class="n">hosts</span><span class="o">.</span><span class="n">api</span>
+<span class="o">=&gt;</span> <span class="s2">"api.localhost"</span>
+</pre></div>
+
+<h3>
+<a name="namespacing" class="anchor" href="#namespacing"><span class="octicon octicon-link"></span></a>Namespacing</h3>
+
+<p>Config file <code>config/global/web/basic_auth.yml</code> with:</p>
+
+<div class="highlight highlight-yml"><pre><span class="l-Scalar-Plain">test</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">username</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">test_user</span>
+  <span class="l-Scalar-Plain">password</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">secret</span>
+<span class="l-Scalar-Plain">development</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">username</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">development_user</span>
+  <span class="l-Scalar-Plain">password</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">secret</span>
+<span class="l-Scalar-Plain">production</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">username</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">production_user</span>
+  <span class="l-Scalar-Plain">password</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">supersecret</span>
+</pre></div>
+
+<p>After that in development environment we have:</p>
+
+<div class="highlight highlight-ruby"><pre><span class="o">&gt;</span> <span class="no">Global</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">basic_auth</span>
+<span class="o">=&gt;</span> <span class="p">{</span> <span class="s2">"username"</span> <span class="o">=&gt;</span> <span class="s2">"development_user"</span><span class="p">,</span> <span class="s2">"password"</span> <span class="o">=&gt;</span> <span class="s2">"secret"</span> <span class="p">}</span>
+<span class="o">&gt;</span> <span class="no">Global</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">basic_auth</span><span class="o">.</span><span class="n">username</span>
+<span class="o">=&gt;</span> <span class="s2">"development_user"</span>
+</pre></div>
+
+<h3>
+<a name="default-section" class="anchor" href="#default-section"><span class="octicon octicon-link"></span></a>Default section</h3>
+
+<p>Config file example:</p>
+
+<div class="highlight highlight-yml"><pre><span class="l-Scalar-Plain">default</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">web</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">localhost</span>
+  <span class="l-Scalar-Plain">api</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">api.localhost</span>
+<span class="l-Scalar-Plain">production</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">web</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">myhost.com</span>
+  <span class="l-Scalar-Plain">api</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">api.myhost.com</span>
+</pre></div>
+
+<p>Data from the default section is used until it's overridden in a specific environment.</p>
+
+<h3>
+<a name="nested-configurations" class="anchor" href="#nested-configurations"><span class="octicon octicon-link"></span></a>Nested configurations</h3>
+
+<p>Config file <code>global/nested.yml</code> with:</p>
+
+<div class="highlight highlight-yml"><pre><span class="l-Scalar-Plain">test</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">group</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">key</span><span class="p-Indicator">:</span> <span class="s">"test</span><span class="nv"> </span><span class="s">value"</span>
+<span class="l-Scalar-Plain">development</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">group</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">key</span><span class="p-Indicator">:</span> <span class="s">"development</span><span class="nv"> </span><span class="s">value"</span>
+<span class="l-Scalar-Plain">production</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">group</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">key</span><span class="p-Indicator">:</span> <span class="s">"production</span><span class="nv"> </span><span class="s">value"</span>
+</pre></div>
+
+<p>Nested options can then be accessed as follows: </p>
+
+<div class="highlight highlight-ruby"><pre><span class="o">&gt;</span> <span class="no">Global</span><span class="o">.</span><span class="n">nested</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">key</span>
+<span class="o">=&gt;</span> <span class="s2">"development value"</span>
+</pre></div>
+
+<h3>
+<a name="erb-support" class="anchor" href="#erb-support"><span class="octicon octicon-link"></span></a>ERB support</h3>
+
+<p>Config file <code>global/file_name.yml</code> with:</p>
+
+<div class="highlight highlight-yml"><pre><span class="l-Scalar-Plain">test</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">key</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">&lt;%=1+1%&gt;</span>
+<span class="l-Scalar-Plain">development</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">key</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">&lt;%=2+2%&gt;</span>
+<span class="l-Scalar-Plain">production</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">key</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">&lt;%=3+3%&gt;</span>
+</pre></div>
+
+<p>As a result, in the development environment we have:</p>
+
+<div class="highlight highlight-ruby"><pre><span class="o">&gt;</span> <span class="no">Global</span><span class="o">.</span><span class="n">file_name</span><span class="o">.</span><span class="n">key</span>
+<span class="o">=&gt;</span> <span class="mi">4</span>
+</pre></div>
+
+<h3>
+<a name="reload-configuration-data" class="anchor" href="#reload-configuration-data"><span class="octicon octicon-link"></span></a>Reload configuration data</h3>
+
+<div class="highlight highlight-ruby"><pre><span class="o">&gt;</span> <span class="no">Global</span><span class="o">.</span><span class="n">reload!</span>
+</pre></div>
+
+<h2>
+<a name="contributing-to-global" class="anchor" href="#contributing-to-global"><span class="octicon octicon-link"></span></a>Contributing to global</h2>
+
+<ul>
+<li>Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet.</li>
+<li>Check out the issue tracker to make sure someone already hasn't requested it and/or contributed it.</li>
+<li>Fork the project.</li>
+<li>Start a feature/bugfix branch.</li>
+<li>Commit and push until you are happy with your contribution.</li>
+<li>Make sure to add tests for it. This is important so I don't break it in a future version unintentionally.</li>
+<li>Please try not to mess with the Rakefile, version, or history. If you want to have your own version, or is otherwise necessary, that is fine, but please isolate to its own commit so I can cherry-pick around it.</li>
+</ul><h2>
+<a name="copyright" class="anchor" href="#copyright"><span class="octicon octicon-link"></span></a>Copyright</h2>
+
+<p>Copyright (c) Railsware LLC. See LICENSE.txt for further details.</p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/railsware">railsware</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
