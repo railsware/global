@@ -20,9 +20,9 @@ Gem::Specification.new do |s|
   s.homepage = "https://github.com/railsware/global"
   s.licenses = ["MIT"]
 
-  s.add_development_dependency "rspec",     "~> 2.14.1"
+  s.add_development_dependency "rspec",     ">= 3.0"
   s.add_development_dependency "simplecov", "~> 0.7.1"
   s.add_development_dependency "rake",      "~> 10.1.0"
 
-  s.add_runtime_dependency "activesupport"
+  s.add_runtime_dependency "activesupport", ">= 2.0"
 end
