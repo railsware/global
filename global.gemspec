@@ -23,6 +23,11 @@ Gem::Specification.new do |s|
   s.add_development_dependency "rspec",     ">= 3.0"
   s.add_development_dependency "simplecov", "~> 0.7.1"
   s.add_development_dependency "rake",      "~> 10.1.0"
+  if defined?(JRUBY_VERSION)
+    s.add_development_dependency "therubyrhino", ">= 0"
+  else
+    s.add_development_dependency "therubyracer", ">= 0"
+  end
 
   s.add_runtime_dependency "activesupport", ">= 2.0"
 end

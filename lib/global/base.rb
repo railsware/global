@@ -1,10 +1,12 @@
-require "erb"
+# encoding: utf-8
+
+require 'erb'
 
 module Global
   module Base
     extend self
 
-    attr_writer :environment, :config_directory
+    attr_writer :environment, :config_directory, :js_namespace
 
     def configure
       yield self
@@ -26,6 +28,15 @@ module Global
     def config_directory
       @config_directory || raise("config_directory should be defined")
     end
+
+    def js_namespace
+      @js_namespace ||= 'GlobalJs'
+    end
+
+    def generate_js(options = {})
+      "window.#{js_namespace} = {test: 1}"
+    end
+
 
     protected
 

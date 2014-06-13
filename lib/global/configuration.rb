@@ -1,4 +1,6 @@
-require "forwardable"
+# encoding: utf-8
+
+require 'forwardable'
 
 module Global
   class Configuration
