@@ -9,49 +9,61 @@ describe Global do
   describe ".environment" do
     subject{ described_class.environment }
 
-    it{ should == "test" }
+    it{ is_expected.to eq("test") }
 
     context "when undefined" do
       before{ described_class.environment = nil }
 
-      it{ lambda{ subject }.should raise_error("environment should be defined") }
+      it{ expect{ subject }.to raise_error("environment should be defined") }
     end
   end
 
   describe ".config_directory" do
     subject{ described_class.config_directory }
 
-    it{ should ==  File.join(Dir.pwd, "spec/files")}
+    it{ is_expected.to eq(File.join(Dir.pwd, "spec/files"))}
 
     context "when undefined" do
       before{ described_class.config_directory = nil }
 
-      it{ lambda{ subject }.should raise_error("config_directory should be defined") }
+      it{ expect{ subject }.to raise_error("config_directory should be defined") }
     end
   end
 
   describe ".configuration" do
     subject{ described_class.configuration }
 
-    it{ should be_instance_of(Global::Configuration) }
+    it{ is_expected.to be_instance_of(Global::Configuration) }
 
     context "when load from directory" do
-      its("rspec_config.to_hash"){ should == {"default_value"=>"default value", "test_value"=>"test value"} }
+      describe '#rspec_config' do
+        subject { super().rspec_config }
+        describe '#to_hash' do
+          subject { super().to_hash }
+          it { is_expected.to eq({"default_value"=>"default value", "test_value"=>"test value"}) }
+        end
+      end
     end
 
     context "when load from file" do
       before{ described_class.config_directory = File.join(Dir.pwd, "spec/files/rspec_config") }
 
-      its("rspec_config.to_hash"){ should == {"default_value"=>"default value", "test_value"=>"test value"} }
+      describe '#rspec_config' do
+        subject { super().rspec_config }
+        describe '#to_hash' do
+          subject { super().to_hash }
+          it { is_expected.to eq({"default_value"=>"default value", "test_value"=>"test value"}) }
+        end
+      end
     end
 
     context "when nested directories" do
-      it{ subject.rspec["config"].to_hash.should == {"default_value"=>"default nested value", "test_value"=>"test nested value"} }
+      it{ expect(subject.rspec["config"].to_hash).to eq({"default_value"=>"default nested value", "test_value"=>"test nested value"}) }
     end
 
     context "when boolean" do
-      it{ subject.bool_config.works.should == true }
-      it{ subject.bool_config.works?.should == true }
+      it{ expect(subject.bool_config.works).to eq(true) }
+      it{ expect(subject.bool_config.works?).to eq(true) }
     end
   end
 
@@ -68,27 +80,34 @@ describe Global do
       described_class.reload!
     end
 
-    it{ should be_instance_of(Global::Configuration) }
-    its("rspec_config.to_hash"){ should == {"default_value"=>"default value", "test_value"=>"development value"} }
+    it{ is_expected.to be_instance_of(Global::Configuration) }
+
+    describe '#rspec_config' do
+      subject { super().rspec_config }
+      describe '#to_hash' do
+        subject { super().to_hash }
+        it { is_expected.to eq({"default_value"=>"default value", "test_value"=>"development value"}) }
+      end
+    end
   end
 
   describe ".method_missing" do
     context "when file exists" do
       subject{ described_class.rspec_config }
 
-      it{ should  be_kind_of(Global::Configuration) }
+      it{ is_expected.to  be_kind_of(Global::Configuration) }
     end
 
     context "when file does not exist" do
       subject{ described_class.some_file }
 
-      it{ lambda{ subject }.should raise_error(NoMethodError) }
+      it{ expect{ subject }.to raise_error(NoMethodError) }
     end
 
     context "when file with nested hash" do
       subject{ described_class.nested_config }
 
-      it{ should be_kind_of(Global::Configuration) }
+      it{ is_expected.to be_kind_of(Global::Configuration) }
     end
 
   end
