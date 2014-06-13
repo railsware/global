@@ -1,10 +1,10 @@
 # global [![Build Status](https://travis-ci.org/railsware/global.png)](https://travis-ci.org/railsware/global) [![Code Climate](https://codeclimate.com/github/railsware/global.png)](https://codeclimate.com/github/railsware/global)
 
-## Description
-
 The 'global' gem provides accessor methods for your configuration data. The data is stored in yaml files.
 
 ## Installation
+
+Add to Gemfile:
 
 ```ruby
 gem 'global'
@@ -151,6 +151,5 @@ As a result, in the development environment we have:
 
 ## Copyright
 
-Copyright (c) 2013 Railsware LLC. See LICENSE.txt for
-further details.
+Copyright (c) Railsware LLC. See LICENSE.txt for further details.
 
