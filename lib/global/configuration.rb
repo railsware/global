@@ -15,7 +15,7 @@ module Global
       @hash = hash.respond_to?(:with_indifferent_access) ? hash.with_indifferent_access : hash
     end
 
-    def full_hash
+    def full_hash(options = {})
       hash_result = hash.map do |k,v|
         case v
         when ::Global::Configuration
