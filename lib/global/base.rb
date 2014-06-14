@@ -35,7 +35,8 @@ module Global
     end
 
     def generate_js(options = {})
-      "window.#{js_namespace} = #{configuration.full_hash.to_json}"
+      namespace = options[:js_namespace] ? options[:js_namespace] : js_namespace
+      "window.#{namespace} = #{configuration.full_hash.to_json}"
     end
 
     protected

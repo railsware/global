@@ -7,6 +7,7 @@ describe Global, "generate js in Rails"  do
       described_class.configure do |config|
         config.environment = "test"
         config.config_directory = File.join(Dir.pwd, "spec/files")
+        config.js_namespace = 'Global'
       end
       evaljs(described_class.generate_js)
     end
@@ -37,6 +38,21 @@ describe Global, "generate js in Rails"  do
 
     it "should generate valid global config" do
       expect(evaljs("CustomGlobal.rspec_config.default_value")).to eq('default value')
+    end
+
+  end
+
+  context 'custom namespace from function' do
+    before do
+      described_class.configure do |config|
+        config.environment = "test"
+        config.config_directory = File.join(Dir.pwd, "spec/files")
+      end
+      evaljs(described_class.generate_js(js_namespace: 'CustomGlobalNamespace'))
+    end
+
+    it "should generate valid global config" do
+      expect(evaljs("CustomGlobalNamespace.rspec_config.default_value")).to eq('default value')
     end
 
   end
