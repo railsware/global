@@ -31,7 +31,7 @@ module Global
     end
 
     def js_namespace
-      @js_namespace ||= 'GlobalJs'
+      @js_namespace ||= 'Global'
     end
 
     def generate_js(options = {})
