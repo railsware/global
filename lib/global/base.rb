@@ -7,7 +7,7 @@ module Global
   module Base
     extend self
 
-    attr_writer :environment, :config_directory, :js_namespace
+    attr_writer :environment, :config_directory, :js_namespace, :js_except, :js_only
 
     def configure
       yield self
@@ -34,9 +34,18 @@ module Global
       @js_namespace ||= 'Global'
     end
 
+    def js_except
+      @js_except ||= :all
+    end
+
+    def js_only
+      @js_only ||= []
+    end
+
     def generate_js(options = {})
       namespace = options[:js_namespace] ? options[:js_namespace] : js_namespace
-      "window.#{namespace} = #{configuration.full_hash(options).to_json}"
+      js_options = { js_except: js_except, js_only: js_only }.merge(options)
+      "window.#{namespace} = #{configuration.full_root_hash(js_options).to_json}"
     end
 
     protected
