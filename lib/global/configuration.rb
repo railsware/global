@@ -8,43 +8,37 @@ module Global
 
     attr_reader :hash, :js_only_list, :js_except_list
 
-    def_delegators :hash, :to_hash, :key?, :[], :[]=, :inspect
+    def_delegators :hash, :key?, :[], :[]=, :inspect
 
 
     def initialize(hash)
       @hash = hash.respond_to?(:with_indifferent_access) ? hash.with_indifferent_access : hash
     end
 
-    def full_root_hash(options = {})
-      # return all
-      if :all == options[:js_only]
-        return full_hash
-      # return empty hash
-      elsif :all == options[:js_except] && 0 == options[:js_only].size
-        return Hash.new
+    def js_to_hash(options = {})
+      unless (hash_res = return_all_for_options(options)).nil?
+        return hash_res
       end
-      # only or except
-      init_except_and_only_arrays(options)
+      # hash result
+      hash_result = []
       # filter hash
-      hash_result = hash.map do |k,v|
-        # check exceptions
-        next if must_skip_this_config_key?(k)
-        # check
-        case v
+      get_js_hash_keys(hash, options).each do |key|
+        v = hash[key]
+        hash_result << case v
         when ::Global::Configuration
-          [k, v.full_hash]
+          [key, v.to_hash]
         else
-          [k, v]
+          [key, v]
         end
       end
-      Hash[hash_result.compact]
+      Hash[hash_result]
     end
 
-    def full_hash
+    def to_hash
       hash_result = hash.map do |k,v|
         case v
         when ::Global::Configuration
-          [k, v.full_hash]
+          [k, v.to_hash]
         else
           [k, v]
         end
@@ -54,18 +48,23 @@ module Global
 
     private
 
-    def init_except_and_only_arrays(options)
-      @js_only_list = (options[:js_only] && options[:js_only].is_a?(Array) ? options[:js_only] : [])
-      @js_except_list = (options[:js_except] && options[:js_except].is_a?(Array) ? options[:js_except] : [])
+    def return_all_for_options(options)
+      if :all == options[:js_except] && 0 == options[:js_only].size
+        Hash.new
+      # return all
+      elsif :all == options[:js_only]
+        to_hash
+      else
+        nil
+      end
     end
 
-    def must_skip_this_config_key?(k)
-      (js_except_list.size > 0 &&
-        (js_except_list.include?(k.to_sym) || js_except_list.include?(k.to_s))
-      ) ||
-      (js_only_list.size > 0 &&
-        (!js_only_list.include?(k.to_sym) && !js_only_list.include?(k.to_s))
-      )
+    def get_js_hash_keys(hash, options)
+      if options[:js_except].is_a?(Array)
+        hash.keys - options[:js_except].map(&:to_s)
+      elsif options[:js_only].is_a?(Array)
+        hash.keys & options[:js_only].map(&:to_s)
+      end
     end
 
     protected

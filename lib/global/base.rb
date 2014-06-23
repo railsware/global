@@ -45,7 +45,7 @@ module Global
     def generate_js(options = {})
       namespace = options[:js_namespace] ? options[:js_namespace] : js_namespace
       js_options = { js_except: js_except, js_only: js_only }.merge(options)
-      "window.#{namespace} = #{configuration.full_root_hash(js_options).to_json}"
+      "window.#{namespace} = #{configuration.js_to_hash(js_options).to_json}"
     end
 
     protected
