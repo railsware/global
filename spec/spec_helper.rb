@@ -5,30 +5,7 @@ $:.unshift(File.dirname(__FILE__))
 require 'rspec'
 require 'global'
 require 'simplecov'
-
-if defined?(JRUBY_VERSION)
-  require 'rhino'
-  JS_LIB_CLASS = Rhino
-else
-  require 'v8'
-  JS_LIB_CLASS = V8
-end
-
-def jscontext(force = false)
-  if force
-    @jscontext = JS_LIB_CLASS::Context.new
-  else
-    @jscontext ||= JS_LIB_CLASS::Context.new
-  end
-end
-
-def js_error_class
-  JS_LIB_CLASS::JSError
-end
-
-def evaljs(string, force = false)
-  jscontext(force).eval(string)
-end
+require 'support/javascript_helper'
 
 SimpleCov.start do
   add_filter '/spec/'
@@ -42,9 +19,5 @@ RSpec.configure do |config|
   config.filter_run :focus
 
   config.order = 'random'
-
-  config.before :each do
-    evaljs("var window = this;", true)
-    jscontext[:log] = lambda {|context, value| puts value.inspect}
-  end
+  config.include JavascriptHelper
 end

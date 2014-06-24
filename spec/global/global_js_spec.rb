@@ -1,6 +1,10 @@
 require "spec_helper"
 
 describe Global, "generate js in Rails"  do
+  before do
+    evaljs("var window = this;", true)
+    jscontext[:log] = lambda {|context, value| puts value.inspect}
+  end
 
   context 'simple generate' do
     before do
