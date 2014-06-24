@@ -4,16 +4,20 @@ describe Global, "generate js in Rails"  do
   before do
     evaljs("var window = this;", true)
     jscontext[:log] = lambda {|context, value| puts value.inspect}
+
+    described_class.configure do |config|
+      config.environment = "test"
+      config.config_directory = File.join(Dir.pwd, "spec/files")
+    end
+
   end
 
   context 'simple generate' do
     before do
       described_class.configure do |config|
-        config.environment = "test"
-        config.config_directory = File.join(Dir.pwd, "spec/files")
-        config.js_namespace = 'Global'
-        config.js_except = :all
-        config.js_only = :all
+        config.namespace = 'Global'
+        config.except = :all
+        config.only = :all
       end
       evaljs(described_class.generate_js)
     end
@@ -39,11 +43,9 @@ describe Global, "generate js in Rails"  do
   context 'custom namespace' do
     before do
       described_class.configure do |config|
-        config.environment = "test"
-        config.config_directory = File.join(Dir.pwd, "spec/files")
-        config.js_namespace = 'CustomGlobal'
-        config.js_except = :all
-        config.js_only = :all
+        config.namespace = 'CustomGlobal'
+        config.except = :all
+        config.only = :all
       end
       evaljs(described_class.generate_js)
     end
@@ -56,11 +58,7 @@ describe Global, "generate js in Rails"  do
 
   context 'custom namespace from function' do
     before do
-      described_class.configure do |config|
-        config.environment = "test"
-        config.config_directory = File.join(Dir.pwd, "spec/files")
-      end
-      evaljs(described_class.generate_js(js_namespace: 'CustomGlobalNamespace', js_only: :all))
+      evaljs(described_class.generate_js(namespace: 'CustomGlobalNamespace', only: :all))
     end
 
     it "should generate valid global config" do
@@ -72,12 +70,11 @@ describe Global, "generate js in Rails"  do
   context 'only select' do
     before do
       described_class.configure do |config|
-        config.environment = "test"
-        config.config_directory = File.join(Dir.pwd, "spec/files")
-        config.js_namespace = 'Global'
-        config.js_except = :all
-        config.js_only = [:bool_config]
+        config.namespace = 'Global'
+        config.except = :all
+        config.only = [:bool_config]
       end
+
       evaljs(described_class.generate_js)
     end
 
@@ -94,11 +91,9 @@ describe Global, "generate js in Rails"  do
   context 'except select' do
     before do
       described_class.configure do |config|
-        config.environment = "test"
-        config.config_directory = File.join(Dir.pwd, "spec/files")
-        config.js_namespace = 'Global'
-        config.js_except = [:nested_config]
-        config.js_only = []
+        config.namespace = 'Global'
+        config.except = [:nested_config]
+        config.only = []
       end
       evaljs(described_class.generate_js)
     end
@@ -116,5 +111,4 @@ describe Global, "generate js in Rails"  do
     end
 
   end
-
 end

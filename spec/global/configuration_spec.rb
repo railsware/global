@@ -42,6 +42,40 @@ describe Global::Configuration do
     it{ is_expected.to eq(hash.inspect) }
   end
 
+  describe "#filter" do
+    subject{ configuration.filter(filter_options) }
+
+    context "when include all" do
+      let(:filter_options){ { only: :all } }
+
+      it{ should == {"key"=>"value", "nested"=>{"key"=>"value"}} }
+    end
+
+    context "when except all" do
+      let(:filter_options){ { except: :all } }
+
+      it{ should == {} }
+    end
+
+    context "when except present" do
+      let(:filter_options){ { except: %w(key) } }
+
+      it{ should == {"nested"=>{"key"=>"value"}} }
+    end
+
+    context "when include present" do
+      let(:filter_options){ { only: %w(key) } }
+
+      it{ should == {"key"=>"value"} }
+    end
+
+    context "when empty options" do
+      let(:filter_options){ {} }
+
+      it{ should == {} }
+    end
+  end
+
   describe "#method_missing" do
     context "when key exist" do
       subject{ configuration.key }
