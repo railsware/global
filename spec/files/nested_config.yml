@@ -1,6 +1,10 @@
 :default:
   nested:
     test_value: "default value"
+  some_array_value:
+    - "First"
+    - "Second"
+    - "Third"
 
 test:
   nested:

@@ -4,3 +4,4 @@ Gemfile.lock
 pkg/*
 .rspec
 coverage/**
+.DS_Store
