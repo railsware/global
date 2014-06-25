@@ -172,6 +172,28 @@ Require global file in `application.js`:
 */
 ```
 
+### Advanced Configuration
+
+In case you need different configurations for different parts of your application, you should create the files manually.
+
+If your application has `admin` and `application` namespace:
+
+```erb
+# app/assets/javascripts/admin/global.js.erb
+<%= Global.generate_js(namespace: "AdminSettings", only: %w(admin hosts)) %>
+
+# app/assets/javascripts/admin.js.coffee
+#= require admin/global
+``` 
+
+```erb
+# app/assets/javascripts/application/global.js.erb
+<%= Global.generate_js(namespace: "AppSettings", except: %w(admin credentials)) %>
+
+# app/assets/javascripts/application.js.coffee
+#= require application/global
+```
+
 ### Usage
 
 Config file example `global/hosts.yml`:
