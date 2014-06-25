@@ -1,6 +1,6 @@
 # Global [![Build Status](https://travis-ci.org/railsware/global.png)](https://travis-ci.org/railsware/global) [![Code Climate](https://codeclimate.com/github/railsware/global.png)](https://codeclimate.com/github/railsware/global)
 
-The 'global' gem provides accessor methods for your configuration data. The data is stored in yaml files.
+The 'global' gem provides accessor methods for your configuration data and share configuration across backend and frontend. The data is stored in yaml files.
 
 ## Installation
 
@@ -124,6 +124,7 @@ Nested options can then be accessed as follows:
 => "development value"
 ```
 
+
 ### ERB support
 
 Config file `global/file_name.yml` with:
@@ -148,6 +149,53 @@ As a result, in the development environment we have:
 
 ```ruby
 > Global.reload!
+```
+
+## JavaScript in Rails support
+
+### Configuration
+
+```ruby
+Global.configure do |config|
+  config.namespace = "JAVASCRIPT_OBJECT_NAME" # default Global
+  config.except = ["LIST_OF_FILES_TO_EXCLUDE_ON_FRONT_END"] # default :all
+  config.only = ["LIST_OF_FILES_TO_INCLUDE_ON_FRONT_END"] # default []
+end
+```
+By default all files are excluded due to security reasons. Don't include files which contain protected information like api keys or credentials. 
+
+Require global file in `application.js`:
+
+``` js
+/*
+= require global-js
+*/
+```
+
+### Usage
+
+Config file example `global/hosts.yml`:
+
+```yml
+development:
+  web: localhost
+  api: api.localhost
+production:
+  web: myhost.com
+  api: api.myhost.com
+```
+After that in development environment we have:
+
+``` js
+Global.hosts.web
+=> "localhost"
+```
+
+And in production: 
+
+``` js
+Global.hosts.web
+=> "myhost.com"
 ```
 
 ## Contributing to global
