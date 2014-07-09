@@ -6,10 +6,10 @@ module Global
 
     initializer 'global-js.dependent_on_configs', after: "sprockets.environment" do
       if Rails.application.assets.respond_to?(:register_preprocessor)
-        configs = Dir.glob("#{Global.config_directory}/*.yml")
+        configs = Dir.glob("#{Global.config_directory}#{File::SEPARATOR}*.yml")
         Rails.application.assets.register_preprocessor 'application/javascript', :'global-js_dependent_on_configs' do |ctx,data|
           if ctx.logical_path == GLOBAL_JS_ASSET
-            configs.map{ |config| ctx.depend_on("#{Global.config_directory}/#{config}") }
+            configs.map{ |config| ctx.depend_on(config) }
           end
           data
         end
