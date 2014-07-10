@@ -29,10 +29,10 @@
       </header>
       <section>
         <h1>
-<a name="global--" class="anchor" href="#global--"><span class="octicon octicon-link"></span></a>global <a href="https://travis-ci.org/railsware/global"><img src="https://travis-ci.org/railsware/global.png" alt="Build Status"></a> <a href="https://codeclimate.com/github/railsware/global"><img src="https://codeclimate.com/github/railsware/global.png" alt="Code Climate"></a>
+<a name="global--" class="anchor" href="#global--"><span class="octicon octicon-link"></span></a>Global <a href="https://travis-ci.org/railsware/global"><img src="https://travis-ci.org/railsware/global.png" alt="Build Status"></a> <a href="https://codeclimate.com/github/railsware/global"><img src="https://codeclimate.com/github/railsware/global.png" alt="Code Climate"></a>
 </h1>
 
-<p>The 'global' gem provides accessor methods for your configuration data. The data is stored in yaml files.</p>
+<p>The 'global' gem provides accessor methods for your configuration data and share configuration across backend and frontend. The data is stored in yaml files.</p>
 
 <h2>
 <a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
@@ -49,10 +49,20 @@
 <span class="o">&gt;</span> <span class="no">Global</span><span class="o">.</span><span class="n">config_directory</span> <span class="o">=</span> <span class="s2">"PATH_TO_DIRECTORY_WITH_FILES"</span>
 </pre></div>
 
+<p>Or you can use <code>configure</code> block:</p>
+
+<div class="highlight highlight-ruby"><pre><span class="no">Global</span><span class="o">.</span><span class="n">configure</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
+  <span class="n">config</span><span class="o">.</span><span class="n">environment</span> <span class="o">=</span> <span class="s2">"YOUR_ENV_HERE"</span>
+  <span class="n">config</span><span class="o">.</span><span class="n">config_directory</span> <span class="o">=</span> <span class="s2">"PATH_TO_DIRECTORY_WITH_FILES"</span>
+<span class="k">end</span>
+</pre></div>
+
 <p>For rails put initialization into <code>config/initializers/global.rb</code></p>
 
-<div class="highlight highlight-ruby"><pre><span class="no">Global</span><span class="o">.</span><span class="n">environment</span> <span class="o">=</span> <span class="no">Rails</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">to_s</span>
-<span class="no">Global</span><span class="o">.</span><span class="n">config_directory</span> <span class="o">=</span> <span class="no">Rails</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">'config/global'</span><span class="p">)</span><span class="o">.</span><span class="n">to_s</span>
+<div class="highlight highlight-ruby"><pre><span class="no">Global</span><span class="o">.</span><span class="n">configure</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
+  <span class="n">config</span><span class="o">.</span><span class="n">environment</span> <span class="o">=</span> <span class="no">Rails</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">to_s</span>
+  <span class="n">config</span><span class="o">.</span><span class="n">config_directory</span> <span class="o">=</span> <span class="no">Rails</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">'config/global'</span><span class="p">)</span><span class="o">.</span><span class="n">to_s</span>
+<span class="k">end</span>
 </pre></div>
 
 <h2>
@@ -137,7 +147,7 @@
     <span class="l-Scalar-Plain">key</span><span class="p-Indicator">:</span> <span class="s">"production</span><span class="nv"> </span><span class="s">value"</span>
 </pre></div>
 
-<p>Nested options can then be accessed as follows: </p>
+<p>Nested options can then be accessed as follows:</p>
 
 <div class="highlight highlight-ruby"><pre><span class="o">&gt;</span> <span class="no">Global</span><span class="o">.</span><span class="n">nested</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">key</span>
 <span class="o">=&gt;</span> <span class="s2">"development value"</span>
@@ -166,6 +176,74 @@
 <a name="reload-configuration-data" class="anchor" href="#reload-configuration-data"><span class="octicon octicon-link"></span></a>Reload configuration data</h3>
 
 <div class="highlight highlight-ruby"><pre><span class="o">&gt;</span> <span class="no">Global</span><span class="o">.</span><span class="n">reload!</span>
+</pre></div>
+
+<h2>
+<a name="javascript-in-rails-support" class="anchor" href="#javascript-in-rails-support"><span class="octicon octicon-link"></span></a>JavaScript in Rails support</h2>
+
+<h3>
+<a name="configuration-1" class="anchor" href="#configuration-1"><span class="octicon octicon-link"></span></a>Configuration</h3>
+
+<div class="highlight highlight-ruby"><pre><span class="no">Global</span><span class="o">.</span><span class="n">configure</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
+  <span class="n">config</span><span class="o">.</span><span class="n">namespace</span> <span class="o">=</span> <span class="s2">"JAVASCRIPT_OBJECT_NAME"</span> <span class="c1"># default Global</span>
+  <span class="n">config</span><span class="o">.</span><span class="n">except</span> <span class="o">=</span> <span class="o">[</span><span class="s2">"LIST_OF_FILES_TO_EXCLUDE_ON_FRONT_END"</span><span class="o">]</span> <span class="c1"># default :all</span>
+  <span class="n">config</span><span class="o">.</span><span class="n">only</span> <span class="o">=</span> <span class="o">[</span><span class="s2">"LIST_OF_FILES_TO_INCLUDE_ON_FRONT_END"</span><span class="o">]</span> <span class="c1"># default []</span>
+<span class="k">end</span>
+</pre></div>
+
+<p>By default all files are excluded due to security reasons. Don't include files which contain protected information like api keys or credentials. </p>
+
+<p>Require global file in <code>application.js</code>:</p>
+
+<div class="highlight highlight-js"><pre><span class="cm">/*</span>
+<span class="cm">= require global-js</span>
+<span class="cm">*/</span>
+</pre></div>
+
+<h3>
+<a name="advanced-configuration" class="anchor" href="#advanced-configuration"><span class="octicon octicon-link"></span></a>Advanced Configuration</h3>
+
+<p>In case you need different configurations for different parts of your application, you should create the files manually.</p>
+
+<p>If your application has <code>admin</code> and <code>application</code> namespace:</p>
+
+<div class="highlight highlight-erb"><pre><span class="x"># app/assets/javascripts/admin/global.js.erb</span>
+<span class="cp">&lt;%=</span> <span class="no">Global</span><span class="o">.</span><span class="n">generate_js</span><span class="p">(</span><span class="ss">namespace</span><span class="p">:</span> <span class="s2">"AdminSettings"</span><span class="p">,</span> <span class="ss">only</span><span class="p">:</span> <span class="sx">%w(admin hosts)</span><span class="p">)</span> <span class="cp">%&gt;</span><span class="x"></span>
+
+<span class="x"># app/assets/javascripts/admin.js.coffee</span>
+<span class="x">#= require admin/global</span>
+</pre></div>
+
+<div class="highlight highlight-erb"><pre><span class="x"># app/assets/javascripts/application/global.js.erb</span>
+<span class="cp">&lt;%=</span> <span class="no">Global</span><span class="o">.</span><span class="n">generate_js</span><span class="p">(</span><span class="ss">namespace</span><span class="p">:</span> <span class="s2">"AppSettings"</span><span class="p">,</span> <span class="ss">except</span><span class="p">:</span> <span class="sx">%w(admin credentials)</span><span class="p">)</span> <span class="cp">%&gt;</span><span class="x"></span>
+
+<span class="x"># app/assets/javascripts/application.js.coffee</span>
+<span class="x">#= require application/global</span>
+</pre></div>
+
+<h3>
+<a name="usage-1" class="anchor" href="#usage-1"><span class="octicon octicon-link"></span></a>Usage</h3>
+
+<p>Config file example <code>global/hosts.yml</code>:</p>
+
+<div class="highlight highlight-yml"><pre><span class="l-Scalar-Plain">development</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">web</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">localhost</span>
+  <span class="l-Scalar-Plain">api</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">api.localhost</span>
+<span class="l-Scalar-Plain">production</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">web</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">myhost.com</span>
+  <span class="l-Scalar-Plain">api</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">api.myhost.com</span>
+</pre></div>
+
+<p>After that in development environment we have:</p>
+
+<div class="highlight highlight-js"><pre><span class="nx">Global</span><span class="p">.</span><span class="nx">hosts</span><span class="p">.</span><span class="nx">web</span>
+<span class="o">=&gt;</span> <span class="s2">"localhost"</span>
+</pre></div>
+
+<p>And in production: </p>
+
+<div class="highlight highlight-js"><pre><span class="nx">Global</span><span class="p">.</span><span class="nx">hosts</span><span class="p">.</span><span class="nx">web</span>
+<span class="o">=&gt;</span> <span class="s2">"myhost.com"</span>
 </pre></div>
 
 <h2>
