@@ -20,6 +20,15 @@ module Global
       hash.select{|key, _| keys.include?(key)}
     end
 
+    def respond_to?(symbol, include_all=false)
+      method = normalize_key_by_method(symbol)
+      if key?(method)
+        true
+      else
+        super
+      end
+    end
+
     private
 
     def filtered_keys_list(options)
@@ -39,7 +48,7 @@ module Global
     protected
 
     def method_missing(method, *args, &block)
-      method = method.to_s[0..-2] if method.to_s[-1] == '?'
+      method = normalize_key_by_method(method)
       if key?(method)
         value = hash[method]
         value.kind_of?(Hash) ? Global::Configuration.new(value) : value
@@ -47,5 +56,11 @@ module Global
         super
       end
     end
+
+    def normalize_key_by_method(method)
+      '?' == method.to_s[-1] ? method.to_s[0..-2] : method
+    end
+
+
   end
 end
