@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe Global::Configuration do
+RSpec.describe Global::Configuration do
   let(:hash){ { "key" => "value", "nested" => { "key" => "value" } } }
   let(:configuration){ described_class.new hash }
 
@@ -95,4 +95,25 @@ describe Global::Configuration do
       it{ is_expected.to eq("value") }
     end
   end
+
+  describe "#respond_to?" do
+    context "when key exist" do
+      subject{ configuration.respond_to?(:key) }
+
+      it{ is_expected.to eq(true) }
+    end
+
+    context "when key does not exist" do
+      subject{ configuration.respond_to?(:some_key) }
+
+      it{ is_expected.to eq(false) }
+    end
+
+    context "with nested hash" do
+      subject{ configuration.nested.respond_to?(:key) }
+
+      it{ is_expected.to eq(true) }
+    end
+  end
+
 end

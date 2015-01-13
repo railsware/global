@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe Global do
+RSpec.describe Global do
 
   before(:each) do
     described_class.configure do |config|
