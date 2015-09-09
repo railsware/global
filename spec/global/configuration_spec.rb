@@ -96,7 +96,7 @@ RSpec.describe Global::Configuration do
     end
   end
 
-  describe "#respond_to?" do
+  describe "#respond_to_missing?" do
     context "when key exist" do
       subject{ configuration.respond_to?(:key) }
 
@@ -113,6 +113,18 @@ RSpec.describe Global::Configuration do
       subject{ configuration.nested.respond_to?(:key) }
 
       it{ is_expected.to eq(true) }
+    end
+
+    context "when call it by method" do
+      subject{ configuration.method(:key).call }
+
+      it{ is_expected.to eq("value") }
+    end
+
+    context "when call it by method, which not exist" do
+      it 'raise error' do
+        expect{ configuration.method(:some_key) }.to raise_error(NameError)
+      end
     end
   end
 
