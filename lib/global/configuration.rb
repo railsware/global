@@ -20,15 +20,6 @@ module Global
       hash.select{|key, _| keys.include?(key)}
     end
 
-    def respond_to?(symbol, include_all=false)
-      method = normalize_key_by_method(symbol)
-      if key?(method)
-        true
-      else
-        super
-      end
-    end
-
     private
 
     def filtered_keys_list(options)
@@ -41,11 +32,16 @@ module Global
       end
 
       return hash.keys if options[:only] == :all
-      return [] if  options[:except] == :all
+      return [] if options[:except] == :all
       return []
     end
 
     protected
+
+    def respond_to_missing?(method_name, include_private=false)
+      method = normalize_key_by_method(method_name)
+      key?(method) || super
+    end
 
     def method_missing(method, *args, &block)
       method = normalize_key_by_method(method)
