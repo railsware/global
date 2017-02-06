@@ -22,6 +22,24 @@ RSpec.describe Global::Configuration do
     it{ is_expected.to be_truthy }
   end
 
+  describe "has_key?" do
+    subject{ configuration.has_key?(:key) }
+
+    it{ is_expected.to be_truthy }
+  end
+
+  describe "include?" do
+    subject{ configuration.include?(:key) }
+
+    it{ is_expected.to be_truthy }
+  end
+
+  describe "member?" do
+    subject{ configuration.member?(:key) }
+
+    it{ is_expected.to be_truthy }
+  end
+
   describe "#[]" do
     subject{ configuration[:key] }
 
