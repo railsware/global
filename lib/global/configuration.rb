@@ -8,7 +8,7 @@ module Global
 
     attr_reader :hash
 
-    def_delegators :hash, :key?, :[], :[]=, :to_hash, :to_json, :inspect
+    def_delegators :hash, :key?, :has_key?, :include?, :member?, :[], :[]=, :to_hash, :to_json, :inspect
 
 
     def initialize(hash)
