@@ -61,7 +61,7 @@ module Global
             "application/javascript",
             SprocketsExtension
           )
-        else
+        elsif Rails.application.config.respond_to?(:assets)
           # Other rails version, assumed newer
           Rails.application.config.assets.configure do |config|
             config.register_preprocessor(
