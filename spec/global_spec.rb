@@ -98,13 +98,13 @@ RSpec.describe Global do
     context "when file exists" do
       subject{ described_class.respond_to?(:rspec_config) }
 
-      it{ is_expected.to be_true }
+      it{ is_expected.to be_truthy }
     end
 
     context "when file does not exist" do
       subject{ described_class.respond_to?(:some_file) }
 
-      it{ is_expected.to be_false }
+      it{ is_expected.to be_falsey }
     end
   end
 
