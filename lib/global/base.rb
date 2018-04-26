@@ -81,6 +81,10 @@ module Global
 
       config
     end
+    
+    def respond_to_missing?(method, include_private=false)
+      configuration.key?(method) || super
+    end
 
     def method_missing(method, *args, &block)
       configuration.key?(method) ? configuration[method] : super
