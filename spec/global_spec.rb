@@ -93,6 +93,20 @@ RSpec.describe Global do
       end
     end
   end
+  
+  describe ".respond_to_missing?" do
+    context "when file exists" do
+      subject{ described_class.respond_to?(:rspec_config) }
+
+      it{ is_expected.to be_true }
+    end
+
+    context "when file does not exist" do
+      subject{ described_class.respond_to?(:some_file) }
+
+      it{ is_expected.to be_false }
+    end
+  end
 
   describe ".method_missing" do
     context "when file exists" do
