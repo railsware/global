@@ -1,0 +1,6 @@
+:default:
+  activated: false
+
+test:
+  activated: true
+  api_key: 'nothing'

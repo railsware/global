@@ -124,6 +124,39 @@ Nested options can then be accessed as follows:
 => "development value"
 ```
 
+### Environment files
+
+Config file `global/aws.yml` with:
+```yml
+:default:
+  activated: false
+
+staging:
+  activated: true
+  api_key: 'nothing'
+
+```
+
+And file `global/aws.production.yml` with:
+```yml
+:activated: true
+:api_key: 'some api key'
+:api_secret: 'some secret'
+
+```
+
+Provide such configuration on `Global.environment = 'production'` environment:
+
+```ruby
+> Global.aws.activated
+=> true
+> Global.aws.api_key
+=> 'some api key'
+> Global.aws.api_secret
+=> 'some secret'
+```
+
+**Warning**: files with dot(s) in name will be skipped by Global (except this env files).
 
 ### ERB support
 
@@ -162,7 +195,7 @@ Global.configure do |config|
   config.only = ["LIST_OF_FILES_TO_INCLUDE_ON_FRONT_END"] # default []
 end
 ```
-By default all files are excluded due to security reasons. Don't include files which contain protected information like api keys or credentials. 
+By default all files are excluded due to security reasons. Don't include files which contain protected information like api keys or credentials.
 
 Require global file in `application.js`:
 
@@ -184,7 +217,7 @@ If your application has `admin` and `application` namespace:
 
 # app/assets/javascripts/admin.js.coffee
 #= require admin/global
-``` 
+```
 
 ```erb
 # app/assets/javascripts/application/global.js.erb
@@ -213,7 +246,7 @@ Global.hosts.web
 => "localhost"
 ```
 
-And in production: 
+And in production:
 
 ``` js
 Global.hosts.web
@@ -233,4 +266,3 @@ Global.hosts.web
 ## Copyright
 
 Copyright (c) Railsware LLC. See LICENSE.txt for further details.
-

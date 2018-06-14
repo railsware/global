@@ -1,0 +1,91 @@
+Layout/EmptyLinesAroundBlockBody:
+  Enabled: false
+
+Layout/SpaceInsideBlockBraces:
+  Enabled: true
+  EnforcedStyle: space
+  EnforcedStyleForEmptyBraces: no_space
+  SpaceBeforeBlockParameters: true
+
+Layout/SpaceBeforeBlockBraces:
+  Enabled: true
+  EnforcedStyle: space
+  EnforcedStyleForEmptyBraces: space
+
+Layout/SpaceInsideHashLiteralBraces:
+  Enabled: true
+  EnforcedStyle: compact
+  EnforcedStyleForEmptyBraces: no_space
+
+Layout/EmptyLinesAroundClassBody:
+  Enabled: true
+  EnforcedStyle: empty_lines_except_namespace
+
+Layout/EmptyLinesAroundModuleBody:
+  Enabled: true
+  EnforcedStyle: empty_lines_except_namespace
+
+Layout/MultilineMethodCallIndentation:
+  Enabled: true
+  EnforcedStyle: indented
+
+Layout/AlignHash:
+  Enabled: true
+  EnforcedLastArgumentHashStyle: always_ignore
+
+Style/RaiseArgs:
+  EnforcedStyle: compact
+
+Style/YodaCondition:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: true
+  EnforcedStyle: always
+
+Style/RegexpLiteral:
+  Enabled: true
+  EnforcedStyle: slashes
+  AllowInnerSlashes: false
+
+Layout/IndentHash:
+  EnforcedStyle: consistent
+
+Style/Documentation:
+  Enabled: false
+
+Style/SafeNavigation:
+  Enabled: true
+  Whitelist:
+    - present?
+    - blank?
+    - presence
+
+Lint/AmbiguousBlockAssociation:
+  Exclude:
+    - 'spec/**/*'
+
+Naming/PredicateName:
+  Exclude:
+    - 'spec/**/*'
+
+Style/NumericPredicate:
+  Exclude:
+    - 'spec/**/*'
+
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*'
+
+Metrics/LineLength:
+  Max: 120
+  Exclude:
+    - 'spec/**/*'
+
+Metrics/AbcSize:
+  Max: 22
+  Exclude:
+    - 'spec/**/*'
+
+Style/ModuleFunction:
+  EnforcedStyle: extend_self

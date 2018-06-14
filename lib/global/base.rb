@@ -1,10 +1,14 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 require 'erb'
 require 'json'
 
 module Global
   module Base
+
+    FILE_ENV_SPLIT = '.'
+    YAML_EXT = '.yml'
+
     extend self
 
     attr_writer :environment, :config_directory, :namespace, :except, :only
@@ -23,11 +27,11 @@ module Global
     end
 
     def environment
-      @environment || raise("environment should be defined")
+      @environment || raise('environment should be defined')
     end
 
     def config_directory
-      @config_directory || raise("config_directory should be defined")
+      @config_directory || raise('config_directory should be defined')
     end
 
     def namespace
@@ -60,13 +64,27 @@ module Global
     def load_from_file(dir, env)
       config = {}
 
-      if File.exists?(file = "#{dir}.yml")
-        configurations = YAML::load(ERB.new(IO.read(file)).result)
-        config = configurations[:default] || configurations["default"] || {}
-        config.deep_merge!(configurations[env] || {})
+      if File.exist?(file = "#{dir}#{YAML_EXT}")
+        configurations = load_yml_file(file)
+        config = get_config_by_key(configurations, 'default')
+        config.deep_merge!(get_config_by_key(configurations, env))
+        if File.exist?(env_file = "#{dir}#{FILE_ENV_SPLIT}#{env}#{YAML_EXT}")
+          config.deep_merge!(load_yml_file(env_file) || {})
+        end
       end
 
       config
+    end
+
+    def get_config_by_key(config, key)
+      config[key.to_sym] || config[key.to_s] || {}
+    end
+
+    def load_yml_file(file)
+      YAML.safe_load(
+        ERB.new(IO.read(file)).result,
+        [Date, Time, DateTime, Symbol], [], true
+      )
     end
 
     def load_from_directory(dir, env)
@@ -74,20 +92,23 @@ module Global
 
       if File.directory?(dir)
         Dir["#{dir}/*"].each do |entry|
-          namespace = entry.gsub(/^#{dir}\/?/, '').gsub(/\.yml$/, '')
-          config.deep_merge!(namespace => load_configuration(entry.gsub(/\.yml$/, ''), env))
+          namespace = File.basename(entry, YAML_EXT)
+          next if namespace.include? FILE_ENV_SPLIT # skip files with dot(s) in name
+          file_with_path = File.join(File.dirname(entry), File.basename(entry, YAML_EXT))
+          config.deep_merge!(namespace => load_configuration(file_with_path, env))
         end
       end
 
       config
     end
-    
-    def respond_to_missing?(method, include_private=false)
+
+    def respond_to_missing?(method, include_private = false)
       configuration.key?(method) || super
     end
 
     def method_missing(method, *args, &block)
       configuration.key?(method) ? configuration[method] : super
     end
+
   end
 end
