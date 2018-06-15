@@ -1,0 +1,8 @@
+title: Global
+description: "\"Global\" provides accessor methods for your configuration data"
+google_analytics: 
+show_downloads: true
+theme: jekyll-theme-minimal
+
+gems:
+  - jekyll-mentions
