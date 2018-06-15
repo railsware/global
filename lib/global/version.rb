@@ -1,5 +1,7 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 module Global
-  VERSION = "0.2.2"
+
+  VERSION = '0.2.2'
+
 end

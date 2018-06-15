@@ -1,130 +1,143 @@
-require "spec_helper"
+# frozen_string_literal: true
+
+require 'spec_helper'
 
 RSpec.describe Global do
 
   before(:each) do
     described_class.configure do |config|
-      config.environment = "test"
-      config.config_directory = File.join(Dir.pwd, "spec/files")
+      config.environment = 'test'
+      config.config_directory = File.join(Dir.pwd, 'spec/files')
     end
   end
 
-  describe ".environment" do
-    subject{ described_class.environment }
+  describe '.environment' do
+    subject { described_class.environment }
 
-    it{ is_expected.to eq("test") }
+    it { is_expected.to eq('test') }
 
-    context "when undefined" do
-      before{ described_class.environment = nil }
+    context 'when undefined' do
+      before { described_class.environment = nil }
 
-      it{ expect{ subject }.to raise_error("environment should be defined") }
+      it { expect { subject }.to raise_error('environment should be defined') }
     end
   end
 
-  describe ".config_directory" do
-    subject{ described_class.config_directory }
+  describe '.config_directory' do
+    subject { described_class.config_directory }
 
-    it{ is_expected.to eq(File.join(Dir.pwd, "spec/files"))}
+    it { is_expected.to eq(File.join(Dir.pwd, 'spec/files')) }
 
-    context "when undefined" do
-      before{ described_class.config_directory = nil }
+    context 'when undefined' do
+      before { described_class.config_directory = nil }
 
-      it{ expect{ subject }.to raise_error("config_directory should be defined") }
+      it { expect { subject }.to raise_error('config_directory should be defined') }
     end
   end
 
-  describe ".configuration" do
-    subject{ described_class.configuration }
+  describe '.configuration' do
+    subject { described_class.configuration }
 
-    it{ is_expected.to be_instance_of(Global::Configuration) }
+    it { is_expected.to be_instance_of(Global::Configuration) }
 
-    context "when load from directory" do
+    context 'when load from directory' do
       describe '#rspec_config' do
         subject { super().rspec_config }
         describe '#to_hash' do
           subject { super().to_hash }
-          it { is_expected.to eq({"default_value"=>"default value", "test_value"=>"test value"}) }
+          it { is_expected.to eq('default_value' => 'default value', 'test_value' => 'test value') }
         end
       end
     end
 
-    context "when load from file" do
-      before{ described_class.config_directory = File.join(Dir.pwd, "spec/files/rspec_config") }
+    context 'when load from file' do
+      before { described_class.config_directory = File.join(Dir.pwd, 'spec/files/rspec_config') }
 
       describe '#rspec_config' do
         subject { super().rspec_config }
         describe '#to_hash' do
           subject { super().to_hash }
-          it { is_expected.to eq({"default_value"=>"default value", "test_value"=>"test value"}) }
+          it { is_expected.to eq('default_value' => 'default value', 'test_value' => 'test value') }
         end
       end
     end
 
-    context "when nested directories" do
-      it{ expect(subject.rspec["config"].to_hash).to eq({"default_value"=>"default nested value", "test_value"=>"test nested value"}) }
+    context 'when nested directories' do
+      it { expect(subject.rspec['config'].to_hash).to eq('default_value' => 'default nested value', 'test_value' => 'test nested value') }
     end
 
-    context "when boolean" do
-      it{ expect(subject.bool_config.works).to eq(true) }
-      it{ expect(subject.bool_config.works?).to eq(true) }
+    context 'when boolean' do
+      it { expect(subject.bool_config.works).to eq(true) }
+      it { expect(subject.bool_config.works?).to eq(true) }
+    end
+
+    context 'environment file' do
+      it { expect(subject.aws.activated).to eq(true) }
+      it { expect(subject.aws.api_key).to eq('some api key') }
+      it { expect(subject.aws.api_secret).to eq('some secret') }
+    end
+
+    context 'skip files with dots in name' do
+      it { expect(subject['aws.test']).to eq(nil) }
+      it { expect { subject.fetch('aws.test') }.to raise_error(KeyError, /key not found/) }
     end
   end
 
-  context ".reload!" do
-    subject{ described_class.reload! }
+  context '.reload!' do
+    subject { described_class.reload! }
 
     before do
       described_class.configuration
-      described_class.environment = "development"
+      described_class.environment = 'development'
     end
 
     after do
-      described_class.environment = "test"
+      described_class.environment = 'test'
       described_class.reload!
     end
 
-    it{ is_expected.to be_instance_of(Global::Configuration) }
+    it { is_expected.to be_instance_of(Global::Configuration) }
 
     describe '#rspec_config' do
       subject { super().rspec_config }
       describe '#to_hash' do
         subject { super().to_hash }
-        it { is_expected.to eq({"default_value"=>"default value", "test_value"=>"development value"}) }
+        it { is_expected.to eq('default_value' => 'default value', 'test_value' => 'development value') }
       end
     end
   end
-  
-  describe ".respond_to_missing?" do
-    context "when file exists" do
-      subject{ described_class.respond_to?(:rspec_config) }
 
-      it{ is_expected.to be_truthy }
+  describe '.respond_to_missing?' do
+    context 'when file exists' do
+      subject { described_class.respond_to?(:rspec_config) }
+
+      it { is_expected.to be_truthy }
     end
 
-    context "when file does not exist" do
-      subject{ described_class.respond_to?(:some_file) }
+    context 'when file does not exist' do
+      subject { described_class.respond_to?(:some_file) }
 
-      it{ is_expected.to be_falsey }
+      it { is_expected.to be_falsey }
     end
   end
 
-  describe ".method_missing" do
-    context "when file exists" do
-      subject{ described_class.rspec_config }
+  describe '.method_missing' do
+    context 'when file exists' do
+      subject { described_class.rspec_config }
 
-      it{ is_expected.to  be_kind_of(Global::Configuration) }
+      it { is_expected.to be_kind_of(Global::Configuration) }
     end
 
-    context "when file does not exist" do
-      subject{ described_class.some_file }
+    context 'when file does not exist' do
+      subject { described_class.some_file }
 
-      it{ expect{ subject }.to raise_error(NoMethodError) }
+      it { expect { subject }.to raise_error(NoMethodError) }
     end
 
-    context "when file with nested hash" do
-      subject{ described_class.nested_config }
+    context 'when file with nested hash' do
+      subject { described_class.nested_config }
 
-      it{ is_expected.to be_kind_of(Global::Configuration) }
+      it { is_expected.to be_kind_of(Global::Configuration) }
     end
 
   end

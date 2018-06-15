@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 if defined?(JRUBY_VERSION)
   require 'rhino'
   JS_LIB_CLASS = Rhino
@@ -7,6 +9,7 @@ else
 end
 
 module JavascriptHelper
+
   def evaljs(string, force = false)
     jscontext(force).eval(string)
   end

@@ -4,12 +4,10 @@ cache:
   bundler: true
 
 rvm:
-  - 2.0
-  - 2.1
   - 2.2
-  - 2.3.3
-  - 2.4.2
-  - 2.5.0
+  - 2.3
+  - 2.4
+  - 2.5
   - jruby-19mode
   - ruby-head
   - jruby-head
