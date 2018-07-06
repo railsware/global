@@ -11,7 +11,7 @@ module Global
 
     extend self
 
-    attr_writer :environment, :config_directory, :namespace, :except, :only, :whitelist_classes
+    attr_writer :environment, :config_directory, :namespace, :except, :only, :yaml_whitelist_classes
 
     def configure
       yield self
@@ -46,8 +46,8 @@ module Global
       @only ||= []
     end
 
-    def whitelist_classes
-      @whitelist_classes ||= []
+    def yaml_whitelist_classes
+      @yaml_whitelist_classes ||= []
     end
 
     def generate_js(options = {})
@@ -87,7 +87,7 @@ module Global
     def load_yml_file(file)
       YAML.safe_load(
         ERB.new(IO.read(file)).result,
-        [Date, Time, DateTime, Symbol].concat(whitelist_classes),
+        [Date, Time, DateTime, Symbol].concat(yaml_whitelist_classes),
         [], true
       )
     end
