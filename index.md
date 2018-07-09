@@ -15,6 +15,7 @@ gem 'global'
 ```ruby
 > Global.environment = "YOUR_ENV_HERE"
 > Global.config_directory = "PATH_TO_DIRECTORY_WITH_FILES"
+> Global.yaml_whitelist_classes = [] # optional configuration
 ```
 
 Or you can use `configure` block:
@@ -23,6 +24,7 @@ Or you can use `configure` block:
 Global.configure do |config|
   config.environment = "YOUR_ENV_HERE"
   config.config_directory = "PATH_TO_DIRECTORY_WITH_FILES"
+  config.yaml_whitelist_classes = [] # optional configuration
 end
 ```
 
@@ -32,8 +34,11 @@ For rails put initialization into `config/initializers/global.rb`
 Global.configure do |config|
   config.environment = Rails.env.to_s
   config.config_directory = Rails.root.join('config/global').to_s
+  config.yaml_whitelist_classes = [] # optional configuration
 end
 ```
+
+The `yaml_whitelist_classes` configuration allows you to deserialize other classes from your `.yml`
 
 ## Usage
 
@@ -60,6 +65,23 @@ In the development environment we now have:
 => { "api" => "api.localhost", "web" => "localhost" }
 > Global.hosts.api
 => "api.localhost"
+```
+
+#### Deserialize other classes from `.yml`
+
+Config file `config/global/validations.yml`:
+
+```yml
+default:
+  regexp:
+    email: !ruby/regexp /.@.+\../
+```
+
+Ensure that `Regexp` is included in the `yaml_whitelist_classes` array
+
+```ruby
+Global.validations.regexp.email === 'mail@example.com'
+=> true
 ```
 
 ### Namespacing
