@@ -99,6 +99,7 @@ module Global
         Dir["#{dir}/*"].each do |entry|
           namespace = File.basename(entry, YAML_EXT)
           next if namespace.include? FILE_ENV_SPLIT # skip files with dot(s) in name
+
           file_with_path = File.join(File.dirname(entry), File.basename(entry, YAML_EXT))
           config.deep_merge!(namespace => load_configuration(file_with_path, env))
         end

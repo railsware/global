@@ -30,6 +30,7 @@ module Global
 
       return hash.keys if options[:only] == :all
       return [] if options[:except] == :all
+
       []
     end
 
