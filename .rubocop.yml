@@ -48,7 +48,7 @@ Style/RegexpLiteral:
   EnforcedStyle: slashes
   AllowInnerSlashes: false
 
-Layout/IndentHash:
+Layout/IndentFirstHashElement:
   EnforcedStyle: consistent
 
 Style/Documentation:
