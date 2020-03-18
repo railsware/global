@@ -78,29 +78,29 @@ Style/SafeNavigation:
 
 Lint/AmbiguousBlockAssociation:
   Exclude:
-    - 'spec/**/*'
+    - "spec/**/*"
 
 Naming/PredicateName:
   Exclude:
-    - 'spec/**/*'
+    - "spec/**/*"
 
 Style/NumericPredicate:
   Exclude:
-    - 'spec/**/*'
+    - "spec/**/*"
 
 Metrics/BlockLength:
   Exclude:
-    - 'spec/**/*'
+    - "spec/**/*"
 
 Metrics/LineLength:
   Max: 120
   Exclude:
-    - 'spec/**/*'
+    - "spec/**/*"
 
 Metrics/AbcSize:
   Max: 22
   Exclude:
-    - 'spec/**/*'
+    - "spec/**/*"
 
 Style/ModuleFunction:
   EnforcedStyle: extend_self
