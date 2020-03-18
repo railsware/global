@@ -9,8 +9,8 @@ RSpec.describe Global do
       allow(backend_alpha).to receive(:load).and_return(foo: 'foo', bar: 'bar-alpha')
       described_class.backend backend_alpha
 
-      backend_beta = double('backend1')
-      allow(backend_beta).to receive(:load).and_return(bar: 'bar-beta', baz: 'baz')
+      backend_beta = double('backend_beta')
+      allow(backend_beta).to receive(:load).and_return('bar' => 'bar-beta', 'baz' => 'baz')
       described_class.backend backend_beta
 
       expect(described_class.configuration.to_hash).to eq(

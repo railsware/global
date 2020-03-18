@@ -16,7 +16,9 @@ module Global
       raise 'Backend must be defined' unless @backends
 
       @configuration ||= begin
-        configuration_hash = @backends.reduce({}) { |configuration, backend| configuration.deep_merge(backend.load) }
+        configuration_hash = @backends.reduce({}) do |configuration, backend|
+          configuration.deep_merge(backend.load.with_indifferent_access)
+        end
         Configuration.new(configuration_hash)
       end
     end
