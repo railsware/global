@@ -38,4 +38,9 @@ RSpec.configure do |config|
   config.filter_run :focus
 
   config.order = 'random'
+
+  config.before do
+    Global.remove_instance_variable(:@backends) if Global.instance_variable_defined?(:@backends)
+    Global.remove_instance_variable(:@configuration) if Global.instance_variable_defined?(:@configuration)
+  end
 end

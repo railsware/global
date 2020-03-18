@@ -6,19 +6,19 @@ require 'json'
 module Global
   module Base
 
-    FILE_ENV_SPLIT = '.'
-    YAML_EXT = '.yml'
-
     extend self
-
-    attr_writer :environment, :config_directory, :yaml_whitelist_classes
 
     def configure
       yield self
     end
 
     def configuration
-      @configuration ||= load_configuration(config_directory, environment)
+      raise 'Backend must be defined' unless @backends
+
+      @configuration ||= begin
+        configuration_hash = @backends.reduce({}) { |configuration, backend| configuration.deep_merge(backend.load) }
+        Configuration.new(configuration_hash)
+      end
     end
 
     def reload!
@@ -26,77 +26,47 @@ module Global
       configuration
     end
 
-    def environment
-      @environment || raise('environment should be defined')
-    end
-
-    def config_directory
-      @config_directory || raise('config_directory should be defined')
-    end
-
-    def yaml_whitelist_classes
-      @yaml_whitelist_classes ||= []
+    # Add a backend to load configuration from.
+    #
+    # You can define several backends; they will all be loaded
+    # and the configuration hashes will be merged.
+    #
+    # Configure with either:
+    #   Global.backend :filesystem, directory: 'config', environment: Rails.env
+    # or:
+    #   Global.backend YourConfigurationBackend.new
+    #
+    # backend configuration classes MUST have a `load` method that returns a configuration Hash
+    def backend(backend, options = {})
+      @backends ||= []
+      if backend.is_a?(Symbol)
+        require "global/backend/#{backend}"
+        backend_class = Global::Backend.const_get(camel_case(backend.to_s))
+        @backends.push backend_class.new(options)
+      elsif backend.respond_to?(:load)
+        @backends.push backend
+      else
+        raise 'Backend must be either a Global::Backend class or a symbol'
+      end
     end
 
     protected
-
-    def load_configuration(dir, env)
-      config = load_from_file(dir, env)
-      config.deep_merge!(load_from_directory(dir, env))
-      Configuration.new(config)
-    end
-
-    def load_from_file(dir, env)
-      config = {}
-
-      if File.exist?(file = "#{dir}#{YAML_EXT}")
-        configurations = load_yml_file(file)
-        config = get_config_by_key(configurations, 'default')
-        config.deep_merge!(get_config_by_key(configurations, env))
-        if File.exist?(env_file = "#{dir}#{FILE_ENV_SPLIT}#{env}#{YAML_EXT}")
-          config.deep_merge!(load_yml_file(env_file) || {})
-        end
-      end
-
-      config
-    end
-
-    def get_config_by_key(config, key)
-      return {} if config.empty?
-
-      config[key.to_sym] || config[key.to_s] || {}
-    end
-
-    def load_yml_file(file)
-      YAML.safe_load(
-        ERB.new(IO.read(file)).result,
-        [Date, Time, DateTime, Symbol].concat(yaml_whitelist_classes),
-        [], true
-      )
-    end
-
-    def load_from_directory(dir, env)
-      config = {}
-
-      if File.directory?(dir)
-        Dir["#{dir}/*"].each do |entry|
-          namespace = File.basename(entry, YAML_EXT)
-          next if namespace.include? FILE_ENV_SPLIT # skip files with dot(s) in name
-
-          file_with_path = File.join(File.dirname(entry), File.basename(entry, YAML_EXT))
-          config.deep_merge!(namespace => load_configuration(file_with_path, env))
-        end
-      end
-
-      config
-    end
 
     def respond_to_missing?(method, include_private = false)
       configuration.key?(method) || super
     end
 
     def method_missing(method, *args, &block)
-      configuration.key?(method) ? configuration[method] : super
+      configuration.send(method)
+    rescue NoMethodError
+      super
+    end
+
+    # from Bundler::Thor::Util.camel_case
+    def camel_case(str)
+      return str if str !~ /_/ && str =~ /[A-Z]+.*/
+
+      str.split('_').map(&:capitalize).join
     end
 
   end
