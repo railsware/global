@@ -11,7 +11,7 @@ module Global
 
     extend self
 
-    attr_writer :environment, :config_directory, :namespace, :except, :only, :yaml_whitelist_classes
+    attr_writer :environment, :config_directory, :yaml_whitelist_classes
 
     def configure
       yield self
@@ -32,10 +32,6 @@ module Global
 
     def config_directory
       @config_directory || raise('config_directory should be defined')
-    end
-
-    def namespace
-      @namespace ||= 'Global'
     end
 
     def yaml_whitelist_classes
