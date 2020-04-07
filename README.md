@@ -206,73 +206,87 @@ As a result, in the development environment we have:
 > Global.reload!
 ```
 
-## JavaScript in Rails support
+## Rails Webpacker usage
 
-### Configuration
+Add in `package.json` file `js-yaml` npm package (use command `yarn add js-yaml`).
 
-```ruby
-Global.configure do |config|
-  config.namespace = "JAVASCRIPT_OBJECT_NAME" # default Global
-  config.except = ["LIST_OF_FILES_TO_EXCLUDE_ON_FRONT_END"] # default :all
-  config.only = ["LIST_OF_FILES_TO_INCLUDE_ON_FRONT_END"] # default []
-end
-```
-By default all files are excluded due to security reasons. Don't include files which contain protected information like api keys or credentials.
+Next create file `config/webpacker/global/index.js` with content:
 
-Require global file in `application.js`:
+```js
+const yaml = require('js-yaml')
+const fs = require('fs')
+const path = require('path')
 
-``` js
-/*
-= require global-js
-*/
-```
+const FILE_ENV_SPLIT = '.'
+const YAML_EXT = '.yml'
 
-### Advanced Configuration
+let globalConfig = {
+  environment: null,
+  configDirectory: null
+}
 
-In case you need different configurations for different parts of your application, you should create the files manually.
+const globalConfigure = (options = {}) => {
+  globalConfig = Object.assign({}, globalConfig, options)
+}
 
-If your application has `admin` and `application` namespace:
+const getGlobalConfig = (key) => {
+  let config = {}
+  const filename = path.join(globalConfig.configDirectory, `${key}${YAML_EXT}`)
+  if (fs.existsSync(filename)) {
+    const configurations = yaml.safeLoad(fs.readFileSync(filename, 'utf8'))
+    config = Object.assign({}, config, configurations['default'] || {})
+    config = Object.assign({}, config, configurations[globalConfig.environment] || {})
 
-```erb
-# app/assets/javascripts/admin/global.js.erb
-<%= Global.generate_js(namespace: "AdminSettings", only: %w(admin hosts)) %>
+    const envFilename = path.join(globalConfig.configDirectory, `${key}${FILE_ENV_SPLIT}${globalConfig.environment}${YAML_EXT}`)
+    if (fs.existsSync(envFilename)) {
+      const envConfigurations = yaml.safeLoad(fs.readFileSync(envFilename, 'utf8'))
+      config = Object.assign({}, config, envConfigurations || {})
+    }
+  }
+  return config
+}
 
-# app/assets/javascripts/admin.js.coffee
-#= require admin/global
-```
-
-```erb
-# app/assets/javascripts/application/global.js.erb
-<%= Global.generate_js(namespace: "AppSettings", except: %w(admin credentials)) %>
-
-# app/assets/javascripts/application.js.coffee
-#= require application/global
-```
-
-### Usage
-
-Config file example `global/hosts.yml`:
-
-```yml
-development:
-  web: localhost
-  api: api.localhost
-production:
-  web: myhost.com
-  api: api.myhost.com
-```
-After that in development environment we have:
-
-``` js
-Global.hosts.web
-=> "localhost"
+module.exports = {
+  globalConfigure,
+  getGlobalConfig
+}
 ```
 
-And in production:
+After this modify file `config/webpacker/environment.js`:
 
-``` js
-Global.hosts.web
-=> "myhost.com"
+```js
+const path = require('path')
+const {environment} = require('@rails/webpacker')
+const {globalConfigure, getGlobalConfig} = require('./global')
+
+globalConfigure({
+  environment: process.env.RAILS_ENV || 'development',
+  configDirectory: path.resolve(__dirname, '../global')
+})
+
+const sentrySettings = getGlobalConfig('sentry')
+
+environment.plugins.prepend('Environment', new webpack.EnvironmentPlugin({
+  GLOBAL_SENTRY_ENABLED: sentrySettings.enabled,
+  GLOBAL_SENTRY_JS_KEY: sentrySettings.js,
+  ...
+}))
+
+...
+
+module.exports = environment
+```
+
+Now you can use this variable in you code:
+
+```js
+import {init} from '@sentry/browser'
+
+if (process.env.GLOBAL_SENTRY_ENABLED) {
+  init({
+    dsn: process.env.GLOBAL_SENTRY_JS_KEY
+  })
+}
 ```
 
 ## Contributing to global

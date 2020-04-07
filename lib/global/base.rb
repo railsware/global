@@ -38,23 +38,8 @@ module Global
       @namespace ||= 'Global'
     end
 
-    def except
-      @except ||= :all
-    end
-
-    def only
-      @only ||= []
-    end
-
     def yaml_whitelist_classes
       @yaml_whitelist_classes ||= []
-    end
-
-    def generate_js(options = {})
-      current_namespace = options[:namespace] || namespace
-
-      js_options = { except: except, only: only }.merge(options)
-      "window.#{current_namespace} = #{configuration.filter(js_options).to_json}"
     end
 
     protected
@@ -81,6 +66,8 @@ module Global
     end
 
     def get_config_by_key(config, key)
+      return {} if config.empty?
+
       config[key.to_sym] || config[key.to_s] || {}
     end
 

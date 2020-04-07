@@ -29,9 +29,15 @@ Layout/MultilineMethodCallIndentation:
   Enabled: true
   EnforcedStyle: indented
 
-Layout/AlignHash:
+Layout/HashAlignment:
   Enabled: true
   EnforcedLastArgumentHashStyle: always_ignore
+
+Lint/RaiseException:
+  Enabled: true
+
+Lint/StructNewOverride:
+  Enabled: true
 
 Style/RaiseArgs:
   EnforcedStyle: compact
@@ -43,12 +49,21 @@ Style/FrozenStringLiteralComment:
   Enabled: true
   EnforcedStyle: always
 
+Style/HashEachMethods:
+  Enabled: true
+
+Style/HashTransformKeys:
+  Enabled: true
+
+Style/HashTransformValues:
+  Enabled: true
+
 Style/RegexpLiteral:
   Enabled: true
   EnforcedStyle: slashes
   AllowInnerSlashes: false
 
-Layout/IndentFirstHashElement:
+Layout/FirstHashElementIndentation:
   EnforcedStyle: consistent
 
 Style/Documentation:
@@ -56,7 +71,7 @@ Style/Documentation:
 
 Style/SafeNavigation:
   Enabled: true
-  Whitelist:
+  AllowedMethods:
     - present?
     - blank?
     - presence
