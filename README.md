@@ -271,11 +271,13 @@ will be merged.
 > Global.reload!
 ```
 
-## Rails Webpacker usage
+## Using YAML configuration files with Rails Webpacker
 
-Add in `package.json` file `js-yaml` npm package (use command `yarn add js-yaml`).
+If you use the `:filesystem` backend, you can reuse the same configuration files on the frontend:
 
-Next create file `config/webpacker/global/index.js` with content:
+Add [js-yaml](https://www.npmjs.com/package/js-yaml) npm package to `package.json` (use command `yarn add js-yaml`).
+
+Then create a file at `config/webpacker/global/index.js` with the following:
 
 ```js
 const yaml = require('js-yaml')
@@ -317,7 +319,7 @@ module.exports = {
 }
 ```
 
-After this modify file `config/webpacker/environment.js`:
+After this, modify file `config/webpacker/environment.js`:
 
 ```js
 const path = require('path')
@@ -342,7 +344,7 @@ environment.plugins.prepend('Environment', new webpack.EnvironmentPlugin({
 module.exports = environment
 ```
 
-Now you can use this variable in you code:
+Now you can use these `process.env` keys in your code:
 
 ```js
 import {init} from '@sentry/browser'
