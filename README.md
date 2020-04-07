@@ -32,6 +32,20 @@ Global.configure do |config|
 end
 ```
 
+You can declare as many backends as you want; the configuration trees from the backends are deep-merged together,
+so that the backend declared later overwrites specific keys in the backend declared prior:
+
+```ruby
+Global.configure do |config|
+  config.backend :foo # loads tree { credentials: { hostname: 'api.com', username: 'dev', password: 'dev' } }
+  config.backend :bar # loads tree { credentials: { username: 'xxx', password: 'yyy' } }
+end
+
+Global.credentials.hostname # => 'api.com'
+Global.credentials.username # => 'xxx'
+Global.credentials.password # => 'yyy'
+```
+
 For Rails, put initialization into `config/initializers/global.rb`.
 
 There are some sensible defaults, check your backend class for documentation.
