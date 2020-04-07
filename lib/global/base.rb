@@ -59,9 +59,7 @@ module Global
     end
 
     def method_missing(method, *args, &block)
-      configuration.send(method)
-    rescue NoMethodError
-      super
+      configuration.key?(method) ? configuration.get_configuration_value(method) : super
     end
 
     # from Bundler::Thor::Util.camel_case
