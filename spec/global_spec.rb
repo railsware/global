@@ -4,34 +4,10 @@ require 'spec_helper'
 
 RSpec.describe Global do
 
+  let(:config_path) { File.join(Dir.pwd, 'spec/files') }
   before(:each) do
     described_class.configure do |config|
-      config.environment = 'test'
-      config.config_directory = File.join(Dir.pwd, 'spec/files')
-    end
-  end
-
-  describe '.environment' do
-    subject { described_class.environment }
-
-    it { is_expected.to eq('test') }
-
-    context 'when undefined' do
-      before { described_class.environment = nil }
-
-      it { expect { subject }.to raise_error('environment should be defined') }
-    end
-  end
-
-  describe '.config_directory' do
-    subject { described_class.config_directory }
-
-    it { is_expected.to eq(File.join(Dir.pwd, 'spec/files')) }
-
-    context 'when undefined' do
-      before { described_class.config_directory = nil }
-
-      it { expect { subject }.to raise_error('config_directory should be defined') }
+      config.backend :filesystem, path: config_path, environment: 'test'
     end
   end
 
@@ -51,10 +27,9 @@ RSpec.describe Global do
     end
 
     context 'when load from file' do
-      before { described_class.config_directory = File.join(Dir.pwd, 'spec/files/rspec_config') }
+      let(:config_path) { File.join(Dir.pwd, 'spec/files/rspec_config') }
 
       describe '#rspec_config' do
-        subject { super().rspec_config }
         describe '#to_hash' do
           subject { super().to_hash }
           it { is_expected.to eq('default_value' => 'default value', 'test_value' => 'test value') }
@@ -88,12 +63,8 @@ RSpec.describe Global do
 
     before do
       described_class.configuration
-      described_class.environment = 'development'
-    end
-
-    after do
-      described_class.environment = 'test'
-      described_class.reload!
+      described_class.instance_variable_set('@backends', [])
+      described_class.backend :filesystem, path: config_path, environment: 'development'
     end
 
     it { is_expected.to be_instance_of(Global::Configuration) }
@@ -141,5 +112,4 @@ RSpec.describe Global do
     end
 
   end
-
 end

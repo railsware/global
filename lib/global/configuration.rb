@@ -22,6 +22,13 @@ module Global
       hash.select { |key, _| keys.include?(key) }
     end
 
+    def get_configuration_value(key)
+      return nil unless key?(key)
+
+      value = hash[key]
+      value.is_a?(Hash) ? Global::Configuration.new(value) : value
+    end
+
     private
 
     def filtered_keys_list(options)
@@ -44,8 +51,7 @@ module Global
     def method_missing(method, *args, &block)
       method = normalize_key_by_method(method)
       if key?(method)
-        value = hash[method]
-        value.is_a?(Hash) ? Global::Configuration.new(value) : value
+        get_configuration_value(method)
       else
         super
       end
