@@ -92,7 +92,7 @@ Metrics/BlockLength:
   Exclude:
     - "spec/**/*"
 
-Metrics/LineLength:
+Layout/LineLength:
   Max: 120
   Exclude:
     - "spec/**/*"

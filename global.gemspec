@@ -20,11 +20,11 @@ Gem::Specification.new do |s|
   s.homepage = 'https://github.com/railsware/global'
   s.licenses = ['MIT']
 
+  s.add_development_dependency 'aws-sdk-ssm', '~> 1'
   s.add_development_dependency 'rake',      '~> 12.3.1'
   s.add_development_dependency 'rspec',     '>= 3.0'
   s.add_development_dependency 'rubocop',   '~> 0.81.0'
   s.add_development_dependency 'simplecov', '~> 0.16.1'
-  s.add_development_dependency 'aws-sdk-ssm', '~> 1'
 
   s.add_runtime_dependency 'activesupport', '>= 2.0'
 end
