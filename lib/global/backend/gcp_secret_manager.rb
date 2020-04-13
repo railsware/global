@@ -44,6 +44,8 @@ module Global
         pages.each do |page|
           configuration.deep_merge!(build_configuration_from_pages(page))
         end
+
+        configuration
       end
 
       private
@@ -56,8 +58,8 @@ module Global
 
       def init_prefix(options)
         if defined?(Rails)
-          environment = Rails.env.to_s
           @prefix = options.fetch(:prefix) do
+            environment = Rails.env.to_s
             app_name = options.fetch(:app_name) { Rails.application.class.module_parent_name }
             "#{environment}_#{app_name}_"
           end
