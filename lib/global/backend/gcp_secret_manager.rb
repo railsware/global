@@ -42,7 +42,7 @@ module Global
 
         configuration = {}
         pages.each do |page|
-          configuration.deep_merge!(build_configuration_from_pages(page))
+          configuration.deep_merge!(build_configuration_from_page(page))
         end
 
         configuration
@@ -119,20 +119,20 @@ module Global
         configuration
       end
 
-    end
+      def get_gcp_key_name(parameter)
+        parameter.name.split(GCP_SEPARATOR).last
+      end
 
-    def get_gcp_key_name(parameter)
-      parameter.name.split(GCP_SEPARATOR).last
-    end
+      def get_latest_key_value(key_name)
+        name = @gcsm.secret_version_path(
+          project:        @project_id,
+          secret:         key_name,
+          secret_version: 'latest'
+        )
+        version = @gcsm.access_secret_version(name: name)
+        version.payload.data
+      end
 
-    def get_latest_key_value(key_name)
-      name = @gcsm.secret_version_path(
-        project:        @project_id,
-        secret:         key_name,
-        secret_version: 'latest'
-      )
-      version = @gcsm.access_secret_version(name: name)
-      version.payload.data
     end
 
   end

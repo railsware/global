@@ -29,6 +29,7 @@ Global.configure do |config|
   config.backend :filesystem, environment: "YOUR_ENV_HERE", directory: "PATH_TO_DIRECTORY_WITH_FILES"
   # set up multiple backends and have them merged together:
   config.backend :aws_parameter_store, prefix: '/prod/MyApp/'
+  config.backend :gcp_secret_manager, prefix: 'prod_myapp_', project_id: 'example'
 end
 ```
 
