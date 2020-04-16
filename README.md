@@ -429,6 +429,12 @@ if (process.env.GLOBAL_SENTRY_ENABLED) {
 * Make sure to add tests for it. This is important so I don't break it in a future version unintentionally.
 * Please try not to mess with the Rakefile, version, or history. If you want to have your own version, or is otherwise necessary, that is fine, but please isolate to its own commit so I can cherry-pick around it.
 
-## Copyright
+This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/railsware/global/blob/master/CODE_OF_CONDUCT.md).
 
-Copyright (c) Railsware LLC. See LICENSE.txt for further details.
+## License
+
+The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+
+## Code of Conduct
+
+Everyone interacting in the Global project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/railsware/global/blob/master/CODE_OF_CONDUCT.md).
