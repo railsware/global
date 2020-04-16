@@ -33,6 +33,11 @@ Global.configure do |config|
 end
 ```
 
+### Using multiple backends
+
+Sometimes it is practical to store some configuration data on disk (and perhaps, commit it to source control), but
+keep some other data in a secure remote location. Which is why you can use more than one backend with Global.
+
 You can declare as many backends as you want; the configuration trees from the backends are deep-merged together,
 so that the backend declared later overwrites specific keys in the backend declared prior:
 
@@ -321,12 +326,6 @@ Get configuration in the app:
 > Global.api_endpoint
 => "https://api.myapp.com"
 ```
-
-
-### Combining stores
-
-Sometimes it is practical to store some configuration data on disk, and some in AWS Parameter Store or in Google Cloud Secret Manager; you can declare both backends, and configuration
-will be merged (declaration order influence on configuration merge).
 
 ### Reload configuration data
 
