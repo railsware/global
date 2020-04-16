@@ -5,23 +5,23 @@ require 'google/cloud/secret_manager'
 require 'global/backend/gcp_secret_manager'
 
 RSpec.describe Global::Backend::GcpSecretManager do
-  let(:client) { double() }
+  let(:client) { double }
 
   subject do
     described_class.new(prefix: 'prod-myapp-', client: client, project_id: 'example')
   end
 
   before do
-    @match_item = double()
+    @match_item = double
     allow(@match_item).to receive(:name).and_return('prod-myapp-example-test_key')
 
     @secret_data = double
     allow(@secret_data).to receive_message_chain(:payload, :data).and_return('secret value')
 
-    @not_match_item = double()
+    @not_match_item = double
     allow(@not_match_item).to receive(:name).and_return('different_key')
 
-    @list = double()
+    @list = double
     allow(@list).to receive(:next_page_token).and_return('')
     allow(@list).to receive(:each).and_yield(@match_item).and_yield(@not_match_item)
 
