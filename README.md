@@ -304,11 +304,11 @@ Global.backend(:filesystem)
 Global.backend(:gcp_secret_manager, prefix: 'prod-myapp-', project_id: 'example')
 ```
 
-Create parameters:
+Create secrets:
 
 ```
 prod-myapp-basic_auth-username => "bill"
-prod-myapp-basic_auth-password => "secret" # make sure to encrypt this one!
+prod-myapp-basic_auth-password => "secret"
 prod-myapp-api_endpoint => "https://api.myapp.com"
 ```
 
