@@ -49,15 +49,15 @@ module Global
       end
 
       def init_prefix(options)
-        if defined?(Rails)
-          environment = Rails.env.to_s
-          @prefix = options.fetch(:prefix) do
-            app_name = options.fetch(:app_name) { Rails.application.class.module_parent_name }
-            "/#{environment}/#{app_name}/"
-          end
-        else
-          @prefix = options.fetch(:prefix)
-        end
+        @prefix = if defined?(Rails)
+                    options.fetch(:prefix) do
+                      environment = Rails.env.to_s
+                      app_name = options.fetch(:app_name) { Rails.application.class.module_parent_name }
+                      "/#{environment}/#{app_name}/"
+                    end
+                  else
+                    options.fetch(:prefix)
+                  end
       end
 
       def init_client(options)

@@ -1,3 +1,7 @@
+Metrics/MethodLength:
+  Enabled: true
+  Max: 11
+
 Layout/EmptyLinesAroundBlockBody:
   Enabled: false
 

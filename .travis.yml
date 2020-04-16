@@ -1,4 +1,6 @@
 language: ruby
+os: linux
+dist: bionic
 
 cache:
   bundler: true
@@ -13,13 +15,6 @@ rvm:
 
 notifications:
   email: false
-
-sudo: false
-
-branches:
-  only:
-    - master
-    - development
 
 matrix:
   allow_failures:
