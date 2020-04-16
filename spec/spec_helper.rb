@@ -5,7 +5,6 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 require 'rspec'
 require 'global'
 require 'simplecov'
-require 'support/javascript_helper'
 
 SimpleCov.start do
   add_filter '/spec/'
@@ -39,5 +38,9 @@ RSpec.configure do |config|
   config.filter_run :focus
 
   config.order = 'random'
-  config.include JavascriptHelper
+
+  config.before do
+    Global.remove_instance_variable(:@backends) if Global.instance_variable_defined?(:@backends)
+    Global.remove_instance_variable(:@configuration) if Global.instance_variable_defined?(:@configuration)
+  end
 end

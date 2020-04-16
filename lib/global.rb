@@ -8,7 +8,6 @@ require 'active_support/core_ext/hash/deep_merge'
 
 require 'global/configuration'
 require 'global/base'
-require 'global/engine' if defined?(Rails)
 require 'global/version'
 
 module Global

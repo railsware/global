@@ -1,26 +1,20 @@
 language: ruby
+os: linux
+dist: bionic
 
 cache:
   bundler: true
 
 rvm:
-  - 2.2
-  - 2.3
   - 2.4
   - 2.5
-  - jruby-19mode
+  - 2.6
+  - 2.7
   - ruby-head
   - jruby-head
 
 notifications:
   email: false
-
-sudo: false
-
-branches:
-  only:
-    - master
-    - development
 
 matrix:
   allow_failures:
