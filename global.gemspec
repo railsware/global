@@ -9,8 +9,8 @@ Gem::Specification.new do |s|
   s.authors = ['Railsware LLC']
   s.email = 'contact@railsware.com'
 
-  s.description = 'Simple way to load your configs from yaml'
-  s.summary = 'Simple way to load your configs from yaml'
+  s.description = 'Simple way to load your configs from yaml/aws/gcp'
+  s.summary = 'Simple way to load your configs from yaml/aws/gcp'
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
