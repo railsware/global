@@ -2,7 +2,6 @@
 
 module Global
   module Backend
-
     # Loads Global configuration from the Google Cloud Secret Manager
     # https://cloud.google.com/secret-manager/docs
     #
@@ -57,15 +56,15 @@ module Global
       end
 
       def init_prefix(options)
-        if defined?(Rails)
-          @prefix = options.fetch(:prefix) do
-            environment = Rails.env.to_s
-            app_name = options.fetch(:app_name) { Rails.application.class.module_parent_name }
-            "#{environment}_#{app_name}_"
-          end
-        else
-          @prefix = options.fetch(:prefix)
-        end
+        @prefix = if defined?(Rails)
+                    options.fetch(:prefix) do
+                      environment = Rails.env.to_s
+                      app_name = options.fetch(:app_name) { Rails.application.class.module_parent_name }
+                      "#{environment}_#{app_name}_"
+                    end
+                  else
+                    options.fetch(:prefix)
+                  end
       end
 
       def init_client(options)
@@ -134,6 +133,5 @@ module Global
       end
 
     end
-
   end
 end
