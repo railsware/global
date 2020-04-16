@@ -20,14 +20,14 @@ module Global
     #   you don't need to pass the credentials explicitly.
     #
     # For Rails:
-    # - the `prefix` is optional and defaults to `[Rails enviroment]_[Name of the app class]_`,
-    #    for example: `production_myapp_`
+    # - the `prefix` is optional and defaults to `[Rails enviroment]-[Name of the app class]-`,
+    #    for example: `production-myapp-`
     # - to use a different app name, pass `app_name`,
     #    for example: `backend :gcp_secret_manager, app_name: 'new_name_for_my_app'`
     class GcpSecretManager
 
       GCP_SEPARATOR = '/'
-      PATH_SEPARATOR = '_'
+      PATH_SEPARATOR = '-'
 
       def initialize(options = {})
         @project_id = options.fetch(:project_id)
@@ -60,7 +60,7 @@ module Global
                     options.fetch(:prefix) do
                       environment = Rails.env.to_s
                       app_name = options.fetch(:app_name) { Rails.application.class.module_parent_name }
-                      "#{environment}_#{app_name}_"
+                      "#{environment}-#{app_name}-"
                     end
                   else
                     options.fetch(:prefix)

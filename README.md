@@ -19,7 +19,7 @@ Refer to the documentation on your chosen backend class for other dependencies.
 Refer to the documentation on your chosen backend class for configuration options.
 
 ```ruby
-> Global.backend :filesystem, environment: "YOUR_ENV_HERE", directory: "PATH_TO_DIRECTORY_WITH_FILES",
+> Global.backend(:filesystem, environment: "YOUR_ENV_HERE", directory: "PATH_TO_DIRECTORY_WITH_FILES")
 ```
 
 Or you can use `configure` block:
@@ -29,7 +29,7 @@ Global.configure do |config|
   config.backend :filesystem, environment: "YOUR_ENV_HERE", directory: "PATH_TO_DIRECTORY_WITH_FILES"
   # set up multiple backends and have them merged together:
   config.backend :aws_parameter_store, prefix: '/prod/MyApp/'
-  config.backend :gcp_secret_manager, prefix: 'prod_myapp_', project_id: 'example'
+  config.backend :gcp_secret_manager, prefix: 'prod-myapp-', project_id: 'example'
 end
 ```
 
@@ -61,9 +61,13 @@ end
 
 The `yaml_whitelist_classes` configuration allows you to deserialize other classes from your `.yml`
 
-### Parameter Store
+### AWS Parameter Store
 
 The `aws_options` configuration allows you to customize the AWS credentials and connection.
+
+### Google Cloud Secret Manager
+
+The `gcp_options` configuration allows you to customize the Google Cloud credentials and timeout.
 
 ## Usage
 
@@ -228,7 +232,7 @@ As a result, in the development environment we have:
 => 4
 ```
 
-### Parameter Store
+### AWS Parameter Store
 
 Parameter Store is a secure configuration storage with at-rest encryption. Access is controlled through AWS IAM. You do not need to be hosted on AWS to use Parameter Store.
 
@@ -238,7 +242,7 @@ Some steps you will need to follow:
 
 - Allocate an AWS IAM role for your app.
 - Create an IAM user for the role and pass credentials in standard AWS env vars (applications on Fargate get roles automatically).
-- Choose a prefix for the parameters. By default, the prefix is `/environment_name/AppClassName/`. You can change it with backend parameters.
+- Choose a prefix for the parameters. By default, the prefix is `/environment_name/AppClassName/`. You can change it with backend parameters (prefer to use '/' as separator).
 - Allow the role to read parameters from AWS SSM. Scope access by the prefix that you're going to use.
 - If you will use encrypted parameters: create a KMS key and allow the role to decrypt using the key.
 - Create parameters in Parameter Store. Use encryption for sensitive data like private keys and API credentials.
@@ -250,11 +254,11 @@ Backend setup:
 ```ruby
 # in config/environments/development.rb
 # you don't need to go to Parameter Store for dev machines
-Global.backend = :filesystem
+Global.backend(:filesystem)
 
 # in config/environments/production.rb
 # enterprise grade protection for your secrets
-Global.backend = :aws_parameter_store, app_name: 'my_big_app'
+Global.backend(:aws_parameter_store, app_name: 'my_big_app')
 ```
 
 Create parameters:
@@ -275,10 +279,54 @@ Get configuration in the app:
 => "https://api.myapp.com"
 ```
 
+### Google Cloud Secret Manager
+
+Google Cloud Secret Manager allows you to store, manage, and access secrets as binary blobs or text strings. With the appropriate permissions, you can view the contents of the secret.
+Google Cloud Secret Manager works well for storing configuration information such as database passwords, API keys, or TLS certificates needed by an application at runtime.
+
+Refer to the [official documentation](https://cloud.google.com/secret-manager/docs) to set up the secret manager.
+
+Some steps you will need to follow:
+
+- Choose a prefix for the secret key name. By default, the prefix is `environment_name-AppClassName-`. You can change it with backend parameters (prefer to use '-' as separator).
+
+#### Configuration examples
+
+Backend setup:
+
+```ruby
+# in config/environments/development.rb
+# you don't need to go to Parameter Store for dev machines
+Global.backend(:filesystem)
+
+# in config/environments/production.rb
+# enterprise grade protection for your secrets
+Global.backend(:gcp_secret_manager, prefix: 'prod-myapp-', project_id: 'example')
+```
+
+Create parameters:
+
+```
+prod-myapp-basic_auth-username => "bill"
+prod-myapp-basic_auth-password => "secret" # make sure to encrypt this one!
+prod-myapp-api_endpoint => "https://api.myapp.com"
+```
+
+Get configuration in the app:
+
+```ruby
+# Encrypted parameters are automatically decrypted:
+> Global.basic_auth.password
+=> "secret"
+> Global.api_endpoint
+=> "https://api.myapp.com"
+```
+
+
 ### Combining stores
 
-Sometimes it is practical to store some configuration data on disk, and some in Parameter Store; you can declare both backends, and configuration
-will be merged.
+Sometimes it is practical to store some configuration data on disk, and some in AWS Parameter Store or in Google Cloud Secret Manager; you can declare both backends, and configuration
+will be merged (declaration order influence on configuration merge).
 
 ### Reload configuration data
 

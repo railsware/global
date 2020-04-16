@@ -11,12 +11,12 @@ RSpec.describe Global::Backend::GcpSecretManager do
   end
 
   subject do
-    described_class.new(prefix: 'prod_myapp_', client: client, project_id: 'example')
+    described_class.new(prefix: 'prod-myapp-', client: client, project_id: 'example')
   end
 
   before do
     @match_item = double(Google::Cloud::SecretManager::V1::Secret)
-    allow(@match_item).to receive(:name).and_return('prod_myapp_example_test')
+    allow(@match_item).to receive(:name).and_return('prod-myapp-example-test_key')
 
     @secret_data = double
     allow(@secret_data).to receive_message_chain(:payload, :data).and_return('secret value')
@@ -30,13 +30,13 @@ RSpec.describe Global::Backend::GcpSecretManager do
 
     allow(client).to receive(:project_path).and_return('projects/example')
     allow(client).to receive(:secret_version_path)
-      .with(project: 'example', secret: 'prod_myapp_example_test', secret_version: 'latest')
+      .with(project: 'example', secret: 'prod-myapp-example-test_key', secret_version: 'latest')
       .and_return('some_key_path')
     allow(client).to receive(:access_secret_version).with(name: 'some_key_path').and_return(@secret_data)
     allow(client).to receive(:list_secrets).and_return(@list)
   end
 
   it 'reads parameters from the secret manager' do
-    expect(subject.load).to eq({ example: { test: 'secret value' }})
+    expect(subject.load).to eq({ example: { test_key: 'secret value' }})
   end
 end
