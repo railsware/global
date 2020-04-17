@@ -34,7 +34,7 @@ module Global
     # and the configuration hashes will be merged.
     #
     # Configure with either:
-    #   Global.backend :filesystem, directory: 'config', environment: Rails.env
+    #   Global.backend :filesystem, path: 'config', environment: Rails.env
     # or:
     #   Global.backend YourConfigurationBackend.new
     #
