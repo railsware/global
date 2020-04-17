@@ -5,12 +5,12 @@ module Global
     # Loads Global configuration from the filesystem
     #
     # Available options:
-    # - `directory` (required): the directory with config files
+    # - `path` (required): the directory with config files
     # - `environment` (required): the environment to load
     # - `yaml_whitelist_classes`: the set of classes that are permitted to unmarshal from the configuration files
     #
     # For Rails:
-    # - the `directory` is optional and defaults to `config/global`
+    # - the `path` is optional and defaults to `config/global`
     # - the `environment` is optional and defaults to the current Rails environment
     class Filesystem
 

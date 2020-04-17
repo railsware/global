@@ -19,14 +19,14 @@ Refer to the documentation on your chosen backend class for other dependencies.
 Refer to the documentation on your chosen backend class for configuration options.
 
 ```ruby
-> Global.backend(:filesystem, environment: "YOUR_ENV_HERE", directory: "PATH_TO_DIRECTORY_WITH_FILES")
+> Global.backend(:filesystem, environment: "YOUR_ENV_HERE", path: "PATH_TO_DIRECTORY_WITH_FILES")
 ```
 
 Or you can use `configure` block:
 
 ```ruby
 Global.configure do |config|
-  config.backend :filesystem, environment: "YOUR_ENV_HERE", directory: "PATH_TO_DIRECTORY_WITH_FILES"
+  config.backend :filesystem, environment: "YOUR_ENV_HERE", path: "PATH_TO_DIRECTORY_WITH_FILES"
   # set up multiple backends and have them merged together:
   config.backend :aws_parameter_store, prefix: '/prod/MyApp/'
   config.backend :gcp_secret_manager, prefix: 'prod-myapp-', project_id: 'example'
