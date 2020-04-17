@@ -16,7 +16,7 @@ rvm:
 notifications:
   email: false
 
-matrix:
+jobs:
   allow_failures:
     - rvm: ruby-head
     - rvm: jruby-head
