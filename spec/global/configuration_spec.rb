@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 RSpec.describe Global::Configuration do
-  let(:hash) { { 'key' => 'value', 'nested' => { 'key' => 'value' }} }
+  let(:hash) { { 'key' => 'value', 'boolean_key' => true, 'nested' => { 'key' => 'value' }} }
   let(:configuration) { described_class.new hash }
 
   describe '#hash' do
@@ -68,7 +68,7 @@ RSpec.describe Global::Configuration do
     context 'when include all' do
       let(:filter_options) { { only: :all } }
 
-      it { should == { 'key' => 'value', 'nested' => { 'key' => 'value' }} }
+      it { should == { 'key' => 'value', 'boolean_key' => true, 'nested' => { 'key' => 'value' }} }
     end
 
     context 'when except all' do
@@ -80,7 +80,7 @@ RSpec.describe Global::Configuration do
     context 'when except present' do
       let(:filter_options) { { except: %w[key] } }
 
-      it { should == { 'nested' => { 'key' => 'value' }} }
+      it { should == { 'boolean_key' => true, 'nested' => { 'key' => 'value' }} }
     end
 
     context 'when include present' do
@@ -97,14 +97,26 @@ RSpec.describe Global::Configuration do
   end
 
   describe '#method_missing' do
-    context 'when key exist' do
+    context 'when key exists' do
       subject { configuration.key }
 
       it { is_expected.to eq('value') }
     end
 
+    context 'when boolean key exists' do
+      subject { configuration.boolean_key? }
+
+      it { is_expected.to eq(true) }
+    end
+
     context 'when key does not exist' do
       subject { configuration.some_key }
+
+      it { expect { subject }.to raise_error(NoMethodError) }
+    end
+
+    context 'when boolean key does not exist' do
+      subject { configuration.some_boolean_key? }
 
       it { expect { subject }.to raise_error(NoMethodError) }
     end

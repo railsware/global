@@ -45,7 +45,7 @@ module Global
 
     def respond_to_missing?(method_name, include_private = false)
       method = normalize_key_by_method(method_name)
-      key?(method) || super
+      key?(method) || boolean_method?(method) || super
     end
 
     def method_missing(method, *args, &block)
@@ -57,8 +57,12 @@ module Global
       end
     end
 
+    def boolean_method?(method)
+      '?' == method.to_s[-1]
+    end
+
     def normalize_key_by_method(method)
-      '?' == method.to_s[-1] ? method.to_s[0..-2] : method
+      boolean_method?(method) ? method.to_s[0..-2].to_sym : method
     end
 
   end
