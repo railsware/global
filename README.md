@@ -252,6 +252,12 @@ Some steps you will need to follow:
 - If you will use encrypted parameters: create a KMS key and allow the role to decrypt using the key.
 - Create parameters in Parameter Store. Use encryption for sensitive data like private keys and API credentials.
 
+#### Usage with Go
+
+You can reuse the same configuration in your Go services. For this, we developed a Go module that loads the same configuration tree into Go structs.
+
+See [github.com/railsware/go-global](https://github.com/railsware/go-global) for further instructions.
+
 #### Configuration examples
 
 Backend setup:
