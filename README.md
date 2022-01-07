@@ -1,4 +1,4 @@
-# Global [![Build Status](https://travis-ci.org/railsware/global.png)](https://travis-ci.org/railsware/global) [![Code Climate](https://codeclimate.com/github/railsware/global.png)](https://codeclimate.com/github/railsware/global)
+# Global [![Runs linter and tests](https://github.com/railsware/global/actions/workflows/tests.yml/badge.svg?branch=master)](https://github.com/railsware/global/actions/workflows/tests.yml) [![Code Climate](https://codeclimate.com/github/railsware/global.png)](https://codeclimate.com/github/railsware/global)
 
 The 'global' gem provides accessor methods for your configuration data and share configuration across backend and frontend.
 
