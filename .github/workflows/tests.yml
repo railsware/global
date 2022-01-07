@@ -1,0 +1,24 @@
+name: Runs linter and tests
+
+on: [push, pull_request]
+
+jobs:
+  linters_and_tests:
+    runs-on: ${{ matrix.os }}-latest
+    continue-on-error: ${{ matrix.experimental == true }}
+    name: Linter and tests on ${{ matrix.os }}-ruby-${{ matrix.ruby-version }}
+    strategy:
+      matrix:
+        os: [ubuntu, macos]
+        ruby-version: ['3.1', '3.0', '2.7', '2.6', '2.5']
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby-version }}
+        bundler-cache: true
+
+    - name: Runs linter and tests
+      run: bundle exec rake
