@@ -60,11 +60,14 @@ module Global
       end
 
       def load_yml_file(file)
-        YAML.safe_load(
-          ERB.new(IO.read(file)).result,
-          [Date, Time, DateTime, Symbol].concat(@yaml_whitelist_classes),
-          [], true
-        )
+        file_contents = ERB.new(IO.read(file)).result
+        permitted_classes = [Date, Time, DateTime, Symbol].concat(@yaml_whitelist_classes)
+
+        if Gem::Version.new(Psych::VERSION) >= Gem::Version.new('4')
+          YAML.safe_load(file_contents, permitted_classes: permitted_classes, aliases: true)
+        else
+          YAML.safe_load(file_contents, permitted_classes, [], true)
+        end
       end
 
       def load_from_directory(path)
