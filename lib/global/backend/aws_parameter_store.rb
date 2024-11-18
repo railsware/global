@@ -95,7 +95,7 @@ module Global
       def build_configuration_from_parameters(parameters)
         configuration = {}
         parameters.each do |parameter|
-          parameter_parts = parameter.name[@prefix.length..-1].split(PATH_SEPARATOR).map(&:to_sym)
+          parameter_parts = parameter.name[@prefix.length..].split(PATH_SEPARATOR).map(&:to_sym)
           param_container = parameter_parts[0..-2].reduce(configuration) do |container, part|
             container[part] ||= {}
           end

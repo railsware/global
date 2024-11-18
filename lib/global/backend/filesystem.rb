@@ -60,7 +60,7 @@ module Global
       end
 
       def load_yml_file(file)
-        file_contents = ERB.new(IO.read(file)).result
+        file_contents = ERB.new(File.read(file)).result
         permitted_classes = [Date, Time, DateTime, Symbol].concat(@yaml_whitelist_classes)
 
         if Gem::Version.new(Psych::VERSION) >= Gem::Version.new('4')

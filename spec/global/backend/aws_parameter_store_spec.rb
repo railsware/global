@@ -5,14 +5,15 @@ require 'aws-sdk-ssm'
 require 'global/backend/aws_parameter_store'
 
 RSpec.describe Global::Backend::AwsParameterStore do
-  let(:client) do
-    Aws::SSM::Client.new(stub_responses: true)
-  end
-  subject do
+  subject(:parameter_store) do
     described_class.new(prefix: '/testapp/', client: client)
   end
 
-  it 'reads parameters from the parameter store' do
+  let(:client) do
+    Aws::SSM::Client.new(stub_responses: true)
+  end
+
+  it 'reads parameters from the parameter store' do # rubocop:disable RSpec/ExampleLength, RSpec/MultipleExpectations
     client.stub_responses(
       :get_parameters_by_path,
       [
@@ -37,7 +38,7 @@ RSpec.describe Global::Backend::AwsParameterStore do
         }
       ]
     )
-    expect(subject.load).to eq(
+    expect(parameter_store.load).to eq(
       foo: 'foo-value',
       bar: {
         baz: 'baz-value',

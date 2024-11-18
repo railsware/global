@@ -3,161 +3,124 @@
 require 'spec_helper'
 
 RSpec.describe Global::Configuration do
+  subject(:configuration) { described_class.new hash }
+
   let(:hash) { { 'key' => 'value', 'boolean_key' => true, 'nested' => { 'key' => 'value' }} }
-  let(:configuration) { described_class.new hash }
 
   describe '#hash' do
-    subject { configuration.hash }
-
-    it { is_expected.to eq(hash) }
+    it { expect(configuration.hash).to eq(hash) }
   end
 
   describe '#to_hash' do
-    subject { configuration.to_hash }
-
-    it { is_expected.to eq(hash) }
+    it { expect(configuration.to_hash).to eq(hash) }
   end
 
-  describe 'key?' do
-    subject { configuration.key?(:key) }
-
-    it { is_expected.to be_truthy }
+  describe '#key?' do
+    it { expect(configuration.key?(:key)).to be(true) }
   end
 
-  describe 'has_key?' do
-    subject { configuration.key?(:key) }
-
-    it { is_expected.to be_truthy }
+  describe '#has_key?' do
+    it { expect(configuration).to have_key(:key) }
   end
 
   describe 'include?' do
-    subject { configuration.include?(:key) }
-
-    it { is_expected.to be_truthy }
+    it { expect(configuration.include?(:key)).to be(true) }
   end
 
   describe 'member?' do
-    subject { configuration.member?(:key) }
-
-    it { is_expected.to be_truthy }
+    it { expect(configuration.member?(:key)).to be(true) }
   end
 
   describe '#[]' do
-    subject { configuration[:key] }
-
-    it { is_expected.to eq('value') }
+    it { expect(configuration[:key]).to eq('value') }
   end
 
   describe '#[]=' do
-    subject { configuration[:new_key] }
-
-    before { configuration[:new_key] = 'new_value' }
-
-    it { is_expected.to eq('new_value') }
+    it 'sets new value' do
+      configuration[:new_key] = 'new_value'
+      expect(configuration[:new_key]).to eq('new_value')
+    end
   end
 
   describe '#inspect' do
-    subject { configuration.inspect }
-
-    it { is_expected.to eq(hash.inspect) }
+    it { expect(configuration.inspect).to eq(hash.inspect) }
   end
 
   describe '#filter' do
-    subject { configuration.filter(filter_options) }
+    subject(:filter) { configuration.filter(filter_options) }
 
     context 'when include all' do
       let(:filter_options) { { only: :all } }
 
-      it { should == { 'key' => 'value', 'boolean_key' => true, 'nested' => { 'key' => 'value' }} }
+      it { expect(filter).to eq('key' => 'value', 'boolean_key' => true, 'nested' => { 'key' => 'value' }) }
     end
 
     context 'when except all' do
       let(:filter_options) { { except: :all } }
 
-      it { should == {} }
+      it { expect(filter).to eq({}) }
     end
 
     context 'when except present' do
       let(:filter_options) { { except: %w[key] } }
 
-      it { should == { 'boolean_key' => true, 'nested' => { 'key' => 'value' }} }
+      it { expect(filter).to eq('boolean_key' => true, 'nested' => { 'key' => 'value' }) }
     end
 
     context 'when include present' do
       let(:filter_options) { { only: %w[key] } }
 
-      it { should == { 'key' => 'value' } }
+      it { expect(filter).to eq('key' => 'value') }
     end
 
     context 'when empty options' do
       let(:filter_options) { {} }
 
-      it { should == {} }
+      it { expect(filter).to eq({}) }
     end
   end
 
   describe '#method_missing' do
-    context 'when key exists' do
-      subject { configuration.key }
-
-      it { is_expected.to eq('value') }
+    it 'returns key value' do
+      expect(configuration.key).to eq('value')
     end
 
-    context 'when boolean key exists' do
-      subject { configuration.boolean_key? }
-
-      it { is_expected.to eq(true) }
+    it 'returns boolean key value' do
+      expect(configuration.boolean_key?).to be(true)
     end
 
-    context 'when key does not exist' do
-      subject { configuration.some_key }
-
-      it { expect { subject }.to raise_error(NoMethodError) }
+    it 'raises on missing key' do
+      expect { configuration.some_key }.to raise_error(NoMethodError)
     end
 
-    context 'when boolean key does not exist' do
-      subject { configuration.some_boolean_key? }
-
-      it { expect { subject }.to raise_error(NoMethodError) }
+    it 'raises on missing boolean key' do
+      expect { configuration.some_boolean_key? }.to raise_error(NoMethodError)
     end
 
-    context 'with nested hash' do
-      subject { configuration.nested.key }
-
-      it { is_expected.to eq('value') }
+    it 'returns nested key value' do
+      expect(configuration.nested.key).to eq('value')
     end
   end
 
   describe '#respond_to_missing?' do
-    context 'when key exist' do
-      subject { configuration.respond_to?(:key) }
-
-      it { is_expected.to eq(true) }
+    it 'responds to key' do
+      expect(configuration.respond_to?(:key)).to be(true)
     end
 
-    context 'when key does not exist' do
-      subject { configuration.respond_to?(:some_key) }
-
-      it { is_expected.to eq(false) }
+    it 'does not respond to unknown key' do
+      expect(configuration.respond_to?(:some_key)).to be(false)
     end
 
-    context 'with nested hash' do
-      subject { configuration.nested.respond_to?(:key) }
-
-      it { is_expected.to eq(true) }
+    it 'responds to nested key' do
+      expect(configuration.nested.respond_to?(:key)).to be(true)
     end
 
-    context 'when call it by method' do
-      subject { configuration.method(:key).call }
-
-      it { is_expected.to eq('value') }
+    it 'calls a method' do
+      expect(configuration.method(:key).call).to eq('value')
     end
 
-    context 'when call it by method, which not exist' do
-      it 'raise error' do
-        expect { configuration.method(:some_key) }.to raise_error(NameError)
-      end
+    it 'raised on a missing method call' do
+      expect { configuration.method(:some_key) }.to raise_error(NameError)
     end
   end
-
 end
