@@ -5,7 +5,14 @@ require 'spec_helper'
 RSpec.describe Global::Configuration do
   subject(:configuration) { described_class.new hash }
 
-  let(:hash) { { 'key' => 'value', 'boolean_key' => true, 'nested' => { 'key' => 'value' }} }
+  let(:hash) do
+    {
+      'key' => 'value',
+      'boolean_key' => true,
+      'string_boolean_key' => '1',
+      'nested' => { 'key' => 'value' }
+    }
+  end
 
   describe '#hash' do
     it { expect(configuration.hash).to eq(hash) }
@@ -52,7 +59,7 @@ RSpec.describe Global::Configuration do
     context 'when include all' do
       let(:filter_options) { { only: :all } }
 
-      it { expect(filter).to eq('key' => 'value', 'boolean_key' => true, 'nested' => { 'key' => 'value' }) }
+      it { expect(filter).to eq('key' => 'value', 'boolean_key' => true, 'string_boolean_key' => '1', 'nested' => { 'key' => 'value' }) }
     end
 
     context 'when except all' do
@@ -64,7 +71,7 @@ RSpec.describe Global::Configuration do
     context 'when except present' do
       let(:filter_options) { { except: %w[key] } }
 
-      it { expect(filter).to eq('boolean_key' => true, 'nested' => { 'key' => 'value' }) }
+      it { expect(filter).to eq('boolean_key' => true, 'string_boolean_key' => '1', 'nested' => { 'key' => 'value' }) }
     end
 
     context 'when include present' do
@@ -87,6 +94,10 @@ RSpec.describe Global::Configuration do
 
     it 'returns boolean key value' do
       expect(configuration.boolean_key?).to be(true)
+    end
+
+    it 'casts string boolean key value' do
+      expect(configuration.string_boolean_key?).to be(true)
     end
 
     it 'raises on missing key' do

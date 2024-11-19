@@ -13,6 +13,21 @@ module Global
                    :member?, :[], :[]=, :to_hash, :to_json,
                    :inspect, :fetch
 
+    # rubocop:disable Lint/BooleanSymbol
+    # @see ActiveModel::Type::Boolean::FALSE_VALUES
+    FALSE_VALUES = [
+      false, 0,
+      '0', :'0',
+      'f', :f,
+      'F', :F,
+      'false', :false,
+      'FALSE', :FALSE,
+      'off', :off,
+      'OFF', :OFF
+    ].to_set.freeze
+    private_constant :FALSE_VALUES
+    # rubocop:enable Lint/BooleanSymbol
+
     def initialize(hash)
       @hash = hash.respond_to?(:with_indifferent_access) ? hash.with_indifferent_access : hash
     end
@@ -49,9 +64,10 @@ module Global
     end
 
     def method_missing(method, *args, &block)
-      method = normalize_key_by_method(method)
-      if key?(method)
-        get_configuration_value(method)
+      normalized_method = normalize_key_by_method(method)
+      if key?(normalized_method)
+        value = get_configuration_value(normalized_method)
+        boolean_method?(method) ? cast_boolean(value) : value
       else
         super
       end
@@ -59,6 +75,11 @@ module Global
 
     def boolean_method?(method)
       '?' == method.to_s[-1]
+    end
+
+    # @see ActiveModel::Type::Boolean#cast_value
+    def cast_boolean(value)
+      !FALSE_VALUES.include?(value)
     end
 
     def normalize_key_by_method(method)
