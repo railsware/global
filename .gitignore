@@ -5,3 +5,10 @@ pkg/*
 .rspec
 coverage/**
 .DS_Store
+
+.ruby-gemset
+.ruby-version
+.tool-versions
+
+.vscode
+.idea
