@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'rspec'
-require 'global'
 require 'simplecov'
 
 SimpleCov.start do
@@ -9,6 +7,9 @@ SimpleCov.start do
 
   add_group 'Libraries', '/lib/'
 end
+
+require 'rspec'
+require 'global'
 
 RSpec.configure do |config|
   config.disable_monkey_patching!
