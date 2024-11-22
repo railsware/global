@@ -8,7 +8,6 @@ SimpleCov.start do
   add_group 'Libraries', '/lib/'
 end
 
-require 'rspec'
 require 'global'
 
 RSpec.configure do |config|
