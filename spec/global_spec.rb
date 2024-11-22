@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe Global do
   let(:config_path) { File.join(Dir.pwd, 'spec/files') }
 

@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
 require 'aws-sdk-ssm'
 require 'global/backend/aws_parameter_store'
 

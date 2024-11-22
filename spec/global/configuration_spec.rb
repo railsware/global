@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe Global::Configuration do
   subject(:configuration) { described_class.new hash }
 
