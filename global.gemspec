@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-$LOAD_PATH.push File.expand_path('lib', __dir__)
-require 'global/version'
+require_relative 'lib/global/version'
 
 Gem::Specification.new do |s|
   s.name = 'global'
