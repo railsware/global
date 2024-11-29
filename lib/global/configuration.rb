@@ -79,7 +79,11 @@ module Global
 
     # @see ActiveModel::Type::Boolean#cast_value
     def cast_boolean(value)
-      !FALSE_VALUES.include?(value)
+      if value == '' || value.nil?
+        false
+      else
+        !FALSE_VALUES.include?(value)
+      end
     end
 
     def normalize_key_by_method(method)

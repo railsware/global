@@ -7,7 +7,6 @@ RSpec.describe Global::Configuration do
     {
       'key' => 'value',
       'boolean_key' => true,
-      'string_boolean_key' => '1',
       'nested' => { 'key' => 'value' }
     }
   end
@@ -57,7 +56,7 @@ RSpec.describe Global::Configuration do
     context 'when include all' do
       let(:filter_options) { { only: :all } }
 
-      it { expect(filter).to eq('key' => 'value', 'boolean_key' => true, 'string_boolean_key' => '1', 'nested' => { 'key' => 'value' }) }
+      it { expect(filter).to eq('key' => 'value', 'boolean_key' => true, 'nested' => { 'key' => 'value' }) }
     end
 
     context 'when except all' do
@@ -69,7 +68,7 @@ RSpec.describe Global::Configuration do
     context 'when except present' do
       let(:filter_options) { { except: %w[key] } }
 
-      it { expect(filter).to eq('boolean_key' => true, 'string_boolean_key' => '1', 'nested' => { 'key' => 'value' }) }
+      it { expect(filter).to eq('boolean_key' => true, 'nested' => { 'key' => 'value' }) }
     end
 
     context 'when include present' do
@@ -94,10 +93,6 @@ RSpec.describe Global::Configuration do
       expect(configuration.boolean_key?).to be(true)
     end
 
-    it 'casts string boolean key value' do
-      expect(configuration.string_boolean_key?).to be(true)
-    end
-
     it 'raises on missing key' do
       expect { configuration.some_key }.to raise_error(NoMethodError)
     end
@@ -109,6 +104,41 @@ RSpec.describe Global::Configuration do
     it 'returns nested key value' do
       expect(configuration.nested.key).to eq('value')
     end
+  end
+
+  describe 'predicate methods' do
+    let(:hash) do
+      {
+        false_string: 'false',
+        false_symbol: :false, # rubocop:disable Lint/BooleanSymbol
+        off_string: 'off',
+        zero_string: '0',
+        zero_integer: 0,
+        true_string: 'true',
+        true_symbol: :true, # rubocop:disable Lint/BooleanSymbol
+        on_string: 'on',
+        one_string: '1',
+        one_integer: 1,
+        random_string: ' Offset ',
+        empty_string: '',
+        nil_value: nil
+      }
+    end
+
+    it { expect(configuration.false_string?).to be(false) }
+    it { expect(configuration.false_symbol?).to be(false) }
+    it { expect(configuration.off_string?).to be(false) }
+    it { expect(configuration.zero_string?).to be(false) }
+    it { expect(configuration.zero_integer?).to be(false) }
+    it { expect(configuration.empty_string?).to be(false) }
+    it { expect(configuration.nil_value?).to be(false) }
+
+    it { expect(configuration.true_string?).to be(true) }
+    it { expect(configuration.true_symbol?).to be(true) }
+    it { expect(configuration.on_string?).to be(true) }
+    it { expect(configuration.one_string?).to be(true) }
+    it { expect(configuration.one_integer?).to be(true) }
+    it { expect(configuration.random_string?).to be(true) }
   end
 
   describe '#respond_to_missing?' do
