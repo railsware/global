@@ -1,3 +1,11 @@
+require:
+  - rubocop-rake
+  - rubocop-rspec
+
+AllCops:
+  TargetRubyVersion: 3.0
+  NewCops: enable
+
 Metrics/MethodLength:
   Enabled: true
   Max: 11

@@ -108,7 +108,7 @@ module Global
           key_name = get_gcp_key_name(parameter)
           next unless key_name.start_with?(@prefix)
 
-          parameter_parts = key_name[@prefix.length..-1].split(PATH_SEPARATOR).map(&:to_sym)
+          parameter_parts = key_name[@prefix.length..].split(PATH_SEPARATOR).map(&:to_sym)
           param_container = parameter_parts[0..-2].reduce(configuration) do |container, part|
             container[part] ||= {}
           end

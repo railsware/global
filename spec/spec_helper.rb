@@ -1,9 +1,5 @@
 # frozen_string_literal: true
 
-$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
-$LOAD_PATH.unshift(File.dirname(__FILE__))
-require 'rspec'
-require 'global'
 require 'simplecov'
 
 SimpleCov.start do
@@ -11,6 +7,8 @@ SimpleCov.start do
 
   add_group 'Libraries', '/lib/'
 end
+
+require 'global'
 
 RSpec.configure do |config|
   config.disable_monkey_patching!
