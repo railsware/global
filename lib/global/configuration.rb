@@ -34,7 +34,7 @@ module Global
 
     def filter(options = {})
       keys = filtered_keys_list(options)
-      hash.select { |key, _| keys.include?(key) }
+      hash.slice(*keys)
     end
 
     def get_configuration_value(key)
@@ -67,7 +67,7 @@ module Global
       normalized_method = normalize_key_by_method(method)
       if key?(normalized_method)
         value = get_configuration_value(normalized_method)
-        boolean_method?(method) ? cast_boolean(value) : value
+        boolean_method?(method) ? cast_boolean?(value) : value
       else
         super
       end
@@ -78,7 +78,7 @@ module Global
     end
 
     # @see ActiveModel::Type::Boolean#cast_value
-    def cast_boolean(value)
+    def cast_boolean?(value)
       if value == '' || value.nil?
         false
       else

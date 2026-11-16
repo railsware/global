@@ -12,7 +12,6 @@ RSpec.describe Global::Backend::GcpSecretManager do
   let(:client) { instance_double(Google::Cloud::SecretManager::V1::SecretManagerService::Client) }
 
   before do
-    # rubocop:disable RSpec/VerifiedDoubles
     match_item = double(name: 'prod-myapp-example-test_key')
     not_match_item = double(name: 'different_key')
 
@@ -28,7 +27,6 @@ RSpec.describe Global::Backend::GcpSecretManager do
       .and_return('some_key_path')
     allow(client).to receive(:access_secret_version).with(name: 'some_key_path').and_return(secret_version_response)
     allow(client).to receive_messages(project_path: 'projects/example', list_secrets: page)
-    # rubocop:enable RSpec/VerifiedDoubles
   end
 
   it 'reads parameters from the secret manager' do

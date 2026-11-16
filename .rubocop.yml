@@ -1,4 +1,4 @@
-require:
+plugins:
   - rubocop-rake
   - rubocop-rspec
 
@@ -92,7 +92,7 @@ Lint/AmbiguousBlockAssociation:
   Exclude:
     - "spec/**/*"
 
-Naming/PredicateName:
+Naming/PredicatePrefix:
   Exclude:
     - "spec/**/*"
 
